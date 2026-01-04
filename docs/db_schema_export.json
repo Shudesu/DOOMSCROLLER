@@ -1,0 +1,2605 @@
+{
+  "timestamp": "2026-01-03T14:17:00.396Z",
+  "database_url": "postgres://postgres:****@postgresql-aaa-u64429.vm.elestio.app:25432/postgres?sslmode=disable",
+  "extensions": [],
+  "tables": [
+    {
+      "schemaname": "public",
+      "tablename": "embedding_cursor",
+      "tableowner": "postgres"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "favorites",
+      "tableowner": "postgres"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_accounts",
+      "tableowner": "postgres"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_apify_reels_raw_history",
+      "tableowner": "postgres"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_apify_reels_raw_latest",
+      "tableowner": "postgres"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_jobs",
+      "tableowner": "postgres"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_post_metrics",
+      "tableowner": "postgres"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_post_metrics_latest_table",
+      "tableowner": "postgres"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "owner_monthly",
+      "tableowner": "postgres"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "owner_stats",
+      "tableowner": "postgres"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ranking_30d",
+      "tableowner": "postgres"
+    }
+  ],
+  "columns": [
+    {
+      "table_name": "embedding_cursor",
+      "column_name": "name",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "embedding_cursor",
+      "column_name": "last_updated_at",
+      "ordinal_position": 2,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "embedding_cursor",
+      "column_name": "last_ig_code",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "embedding_cursor",
+      "column_name": "updated_at",
+      "ordinal_position": 4,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": "now()",
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "favorites",
+      "column_name": "user_id",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "favorites",
+      "column_name": "ig_code",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "favorites",
+      "column_name": "created_at",
+      "ordinal_position": 3,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": "now()",
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_accounts",
+      "column_name": "owner_id",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_accounts",
+      "column_name": "username",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_accounts",
+      "column_name": "canonical_url",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_accounts",
+      "column_name": "last_collected_at",
+      "ordinal_position": 4,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_accounts",
+      "column_name": "created_at",
+      "ordinal_position": 5,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": "now()",
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_accounts",
+      "column_name": "updated_at",
+      "ordinal_position": 6,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": "now()",
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_accounts",
+      "column_name": "error_message",
+      "ordinal_position": 7,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_accounts",
+      "column_name": "tier",
+      "ordinal_position": 8,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_accounts",
+      "column_name": "snooze_until",
+      "ordinal_position": 9,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_accounts",
+      "column_name": "avg_play_last20",
+      "ordinal_position": 10,
+      "data_type": "numeric",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "numeric"
+    },
+    {
+      "table_name": "ig_accounts",
+      "column_name": "avg_view_last20",
+      "ordinal_position": 11,
+      "data_type": "numeric",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "numeric"
+    },
+    {
+      "table_name": "ig_accounts",
+      "column_name": "newest_posted_at",
+      "ordinal_position": 12,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_history",
+      "column_name": "id",
+      "ordinal_position": 1,
+      "data_type": "bigint",
+      "character_maximum_length": null,
+      "numeric_precision": 64,
+      "numeric_scale": 0,
+      "is_nullable": "NO",
+      "column_default": "nextval('ig_apify_reels_raw_history_id_seq'::regclass)",
+      "udt_name": "int8"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_history",
+      "column_name": "ig_code",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_history",
+      "column_name": "owner_id",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_history",
+      "column_name": "owner_username",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_history",
+      "column_name": "posted_at",
+      "ordinal_position": 5,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_history",
+      "column_name": "likes_count",
+      "ordinal_position": 6,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_history",
+      "column_name": "comments_count",
+      "ordinal_position": 7,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_history",
+      "column_name": "video_view_count",
+      "ordinal_position": 8,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_history",
+      "column_name": "video_play_count",
+      "ordinal_position": 9,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_history",
+      "column_name": "video_duration_sec",
+      "ordinal_position": 10,
+      "data_type": "numeric",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "numeric"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_history",
+      "column_name": "payload",
+      "ordinal_position": 11,
+      "data_type": "jsonb",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "jsonb"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_history",
+      "column_name": "fetched_at",
+      "ordinal_position": 12,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": "now()",
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_history",
+      "column_name": "apify_run_id",
+      "ordinal_position": 13,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_history",
+      "column_name": "apify_actor_id",
+      "ordinal_position": 14,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_latest",
+      "column_name": "ig_code",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_latest",
+      "column_name": "owner_id",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_latest",
+      "column_name": "owner_username",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_latest",
+      "column_name": "posted_at",
+      "ordinal_position": 4,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_latest",
+      "column_name": "likes_count",
+      "ordinal_position": 5,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_latest",
+      "column_name": "comments_count",
+      "ordinal_position": 6,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_latest",
+      "column_name": "video_view_count",
+      "ordinal_position": 7,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_latest",
+      "column_name": "video_play_count",
+      "ordinal_position": 8,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_latest",
+      "column_name": "video_duration_sec",
+      "ordinal_position": 9,
+      "data_type": "numeric",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "numeric"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_latest",
+      "column_name": "payload",
+      "ordinal_position": 10,
+      "data_type": "jsonb",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "jsonb"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_latest",
+      "column_name": "fetched_at",
+      "ordinal_position": 11,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_latest",
+      "column_name": "apify_run_id",
+      "ordinal_position": 12,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_latest",
+      "column_name": "apify_actor_id",
+      "ordinal_position": 13,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_latest",
+      "column_name": "updated_at",
+      "ordinal_position": 14,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": "now()",
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "ig_code",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "canonical_url",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "first_seen_at",
+      "ordinal_position": 3,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": "now()",
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "status",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": "'queued'::text",
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "transcribed_at",
+      "ordinal_position": 5,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "updated_at",
+      "ordinal_position": 6,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": "now()",
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "audio_url",
+      "ordinal_position": 7,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "transcript_text",
+      "ordinal_position": 8,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "transcript_duration_sec",
+      "ordinal_position": 9,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "error_message",
+      "ordinal_position": 10,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "transcript_ja",
+      "ordinal_position": 11,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "created_at",
+      "ordinal_position": 12,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": "now()",
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "r2_bucket",
+      "ordinal_position": 13,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "r2_key",
+      "ordinal_position": 14,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "audio_saved_at",
+      "ordinal_position": 15,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "apify_actor_id",
+      "ordinal_position": 16,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "apify_run_id",
+      "ordinal_position": 17,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "apify_status",
+      "ordinal_position": 18,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "apify_finished_at",
+      "ordinal_position": 19,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "owner_id",
+      "ordinal_position": 20,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_jobs",
+      "column_name": "transcript_lang",
+      "ordinal_position": 21,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_post_metrics",
+      "column_name": "ig_code",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_post_metrics",
+      "column_name": "owner_id",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_post_metrics",
+      "column_name": "owner_username",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_post_metrics",
+      "column_name": "owner_full_name",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_post_metrics",
+      "column_name": "likes_count",
+      "ordinal_position": 5,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_post_metrics",
+      "column_name": "comments_count",
+      "ordinal_position": 6,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_post_metrics",
+      "column_name": "video_view_count",
+      "ordinal_position": 7,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_post_metrics",
+      "column_name": "video_play_count",
+      "ordinal_position": 8,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_post_metrics",
+      "column_name": "video_duration_sec",
+      "ordinal_position": 9,
+      "data_type": "numeric",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "numeric"
+    },
+    {
+      "table_name": "ig_post_metrics",
+      "column_name": "posted_at",
+      "ordinal_position": 10,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_post_metrics",
+      "column_name": "fetched_at",
+      "ordinal_position": 11,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": "now()",
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_post_metrics",
+      "column_name": "updated_at",
+      "ordinal_position": 12,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": "now()",
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_post_metrics",
+      "column_name": "engagement_rate",
+      "ordinal_position": 13,
+      "data_type": "double precision",
+      "character_maximum_length": null,
+      "numeric_precision": 53,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "float8"
+    },
+    {
+      "table_name": "ig_post_metrics_latest",
+      "column_name": "ig_code",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_post_metrics_latest",
+      "column_name": "owner_id",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_post_metrics_latest",
+      "column_name": "owner_username",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_post_metrics_latest",
+      "column_name": "posted_at",
+      "ordinal_position": 4,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_post_metrics_latest",
+      "column_name": "likes_count",
+      "ordinal_position": 5,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_post_metrics_latest",
+      "column_name": "comments_count",
+      "ordinal_position": 6,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_post_metrics_latest",
+      "column_name": "video_view_count",
+      "ordinal_position": 7,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_post_metrics_latest",
+      "column_name": "video_play_count",
+      "ordinal_position": 8,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_post_metrics_latest",
+      "column_name": "video_duration_sec",
+      "ordinal_position": 9,
+      "data_type": "numeric",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "numeric"
+    },
+    {
+      "table_name": "ig_post_metrics_latest",
+      "column_name": "fetched_at",
+      "ordinal_position": 10,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_post_metrics_latest",
+      "column_name": "apify_actor_id",
+      "ordinal_position": 11,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_post_metrics_latest_table",
+      "column_name": "ig_code",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_post_metrics_latest_table",
+      "column_name": "owner_id",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_post_metrics_latest_table",
+      "column_name": "owner_username",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_post_metrics_latest_table",
+      "column_name": "posted_at",
+      "ordinal_position": 4,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_post_metrics_latest_table",
+      "column_name": "likes_count",
+      "ordinal_position": 5,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_post_metrics_latest_table",
+      "column_name": "comments_count",
+      "ordinal_position": 6,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_post_metrics_latest_table",
+      "column_name": "video_view_count",
+      "ordinal_position": 7,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_post_metrics_latest_table",
+      "column_name": "video_play_count",
+      "ordinal_position": 8,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_post_metrics_latest_table",
+      "column_name": "video_duration_sec",
+      "ordinal_position": 9,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_post_metrics_latest_table",
+      "column_name": "fetched_at",
+      "ordinal_position": 10,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_post_metrics_latest_table",
+      "column_name": "apify_actor_id",
+      "ordinal_position": 11,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_post_metrics_latest_table",
+      "column_name": "updated_at",
+      "ordinal_position": 12,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": "now()",
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_reel_growth",
+      "column_name": "ig_code",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_reel_growth",
+      "column_name": "owner_id",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_reel_growth",
+      "column_name": "from_at",
+      "ordinal_position": 3,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_reel_growth",
+      "column_name": "to_at",
+      "ordinal_position": 4,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_reel_growth",
+      "column_name": "play_diff",
+      "ordinal_position": 5,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_reel_growth",
+      "column_name": "view_diff",
+      "ordinal_position": 6,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_reel_growth",
+      "column_name": "hours_diff",
+      "ordinal_position": 7,
+      "data_type": "numeric",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "numeric"
+    },
+    {
+      "table_name": "ig_reel_growth",
+      "column_name": "play_per_hour",
+      "ordinal_position": 8,
+      "data_type": "numeric",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "numeric"
+    },
+    {
+      "table_name": "ig_reel_growth_latest",
+      "column_name": "ig_code",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_reel_growth_latest",
+      "column_name": "owner_id",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_reel_growth_latest",
+      "column_name": "owner_username",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ig_reel_growth_latest",
+      "column_name": "posted_at",
+      "ordinal_position": 4,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_reel_growth_latest",
+      "column_name": "from_at",
+      "ordinal_position": 5,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_reel_growth_latest",
+      "column_name": "to_at",
+      "ordinal_position": 6,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ig_reel_growth_latest",
+      "column_name": "play_diff",
+      "ordinal_position": 7,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_reel_growth_latest",
+      "column_name": "view_diff",
+      "ordinal_position": 8,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ig_reel_growth_latest",
+      "column_name": "hours_diff",
+      "ordinal_position": 9,
+      "data_type": "numeric",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "numeric"
+    },
+    {
+      "table_name": "ig_reel_growth_latest",
+      "column_name": "play_per_hour",
+      "ordinal_position": 10,
+      "data_type": "numeric",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "numeric"
+    },
+    {
+      "table_name": "owner_monthly",
+      "column_name": "owner_id",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "owner_monthly",
+      "column_name": "month",
+      "ordinal_position": 2,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "owner_monthly",
+      "column_name": "post_count",
+      "ordinal_position": 3,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "owner_monthly",
+      "column_name": "avg_likes",
+      "ordinal_position": 4,
+      "data_type": "double precision",
+      "character_maximum_length": null,
+      "numeric_precision": 53,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "float8"
+    },
+    {
+      "table_name": "owner_monthly",
+      "column_name": "avg_comments",
+      "ordinal_position": 5,
+      "data_type": "double precision",
+      "character_maximum_length": null,
+      "numeric_precision": 53,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "float8"
+    },
+    {
+      "table_name": "owner_monthly",
+      "column_name": "avg_views",
+      "ordinal_position": 6,
+      "data_type": "double precision",
+      "character_maximum_length": null,
+      "numeric_precision": 53,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "float8"
+    },
+    {
+      "table_name": "owner_monthly",
+      "column_name": "updated_at",
+      "ordinal_position": 7,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": "now()",
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "owner_stats",
+      "column_name": "owner_id",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "owner_stats",
+      "column_name": "owner_username",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "owner_stats",
+      "column_name": "total_posts",
+      "ordinal_position": 3,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "owner_stats",
+      "column_name": "transcribed",
+      "ordinal_position": 4,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "owner_stats",
+      "column_name": "has_ja",
+      "ordinal_position": 5,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "owner_stats",
+      "column_name": "avg_likes",
+      "ordinal_position": 6,
+      "data_type": "double precision",
+      "character_maximum_length": null,
+      "numeric_precision": 53,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "float8"
+    },
+    {
+      "table_name": "owner_stats",
+      "column_name": "max_likes",
+      "ordinal_position": 7,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "owner_stats",
+      "column_name": "avg_comments",
+      "ordinal_position": 8,
+      "data_type": "double precision",
+      "character_maximum_length": null,
+      "numeric_precision": 53,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "float8"
+    },
+    {
+      "table_name": "owner_stats",
+      "column_name": "avg_views",
+      "ordinal_position": 9,
+      "data_type": "double precision",
+      "character_maximum_length": null,
+      "numeric_precision": 53,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "float8"
+    },
+    {
+      "table_name": "owner_stats",
+      "column_name": "first_collected_at",
+      "ordinal_position": 10,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "owner_stats",
+      "column_name": "last_updated_at",
+      "ordinal_position": 11,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "owner_stats",
+      "column_name": "updated_at",
+      "ordinal_position": 12,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": "now()",
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "owner_stats",
+      "column_name": "posts_with_transcript",
+      "ordinal_position": 13,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "NO",
+      "column_default": "0",
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "owner_stats",
+      "column_name": "posts_with_ja",
+      "ordinal_position": 14,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "NO",
+      "column_default": "0",
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "owner_stats",
+      "column_name": "avg_plays",
+      "ordinal_position": 15,
+      "data_type": "double precision",
+      "character_maximum_length": null,
+      "numeric_precision": 53,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "float8"
+    },
+    {
+      "table_name": "owner_stats",
+      "column_name": "max_comments",
+      "ordinal_position": 16,
+      "data_type": "bigint",
+      "character_maximum_length": null,
+      "numeric_precision": 64,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int8"
+    },
+    {
+      "table_name": "owner_stats",
+      "column_name": "max_views",
+      "ordinal_position": 17,
+      "data_type": "bigint",
+      "character_maximum_length": null,
+      "numeric_precision": 64,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int8"
+    },
+    {
+      "table_name": "owner_stats",
+      "column_name": "first_post_date",
+      "ordinal_position": 18,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "owner_stats",
+      "column_name": "last_post_date",
+      "ordinal_position": 19,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ranking_30d",
+      "column_name": "ig_code",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "NO",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ranking_30d",
+      "column_name": "owner_id",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ranking_30d",
+      "column_name": "owner_username",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "text"
+    },
+    {
+      "table_name": "ranking_30d",
+      "column_name": "likes_count",
+      "ordinal_position": 4,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ranking_30d",
+      "column_name": "video_view_count",
+      "ordinal_position": 5,
+      "data_type": "integer",
+      "character_maximum_length": null,
+      "numeric_precision": 32,
+      "numeric_scale": 0,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "int4"
+    },
+    {
+      "table_name": "ranking_30d",
+      "column_name": "posted_at",
+      "ordinal_position": 6,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "timestamptz"
+    },
+    {
+      "table_name": "ranking_30d",
+      "column_name": "engagement_rate",
+      "ordinal_position": 7,
+      "data_type": "double precision",
+      "character_maximum_length": null,
+      "numeric_precision": 53,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "float8"
+    },
+    {
+      "table_name": "ranking_30d",
+      "column_name": "total_score",
+      "ordinal_position": 8,
+      "data_type": "double precision",
+      "character_maximum_length": null,
+      "numeric_precision": 53,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": null,
+      "udt_name": "float8"
+    },
+    {
+      "table_name": "ranking_30d",
+      "column_name": "updated_at",
+      "ordinal_position": 9,
+      "data_type": "timestamp with time zone",
+      "character_maximum_length": null,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_nullable": "YES",
+      "column_default": "now()",
+      "udt_name": "timestamptz"
+    }
+  ],
+  "primary_keys": [
+    {
+      "table_name": "embedding_cursor",
+      "constraint_name": "embedding_cursor_pkey",
+      "column_name": "name",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "favorites",
+      "constraint_name": "favorites_pkey",
+      "column_name": "user_id",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "favorites",
+      "constraint_name": "favorites_pkey",
+      "column_name": "ig_code",
+      "ordinal_position": 2
+    },
+    {
+      "table_name": "ig_accounts",
+      "constraint_name": "ig_accounts_pkey",
+      "column_name": "owner_id",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "ig_apify_reels_raw_history",
+      "constraint_name": "ig_apify_reels_raw_history_pkey",
+      "column_name": "id",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "ig_apify_reels_raw_latest",
+      "constraint_name": "ig_apify_reels_raw_latest_pkey",
+      "column_name": "ig_code",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "ig_jobs",
+      "constraint_name": "ig_jobs_pkey",
+      "column_name": "ig_code",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "ig_post_metrics",
+      "constraint_name": "ig_post_metrics_pkey",
+      "column_name": "ig_code",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "ig_post_metrics_latest_table",
+      "constraint_name": "ig_post_metrics_latest_table_pkey",
+      "column_name": "ig_code",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "owner_monthly",
+      "constraint_name": "owner_monthly_pkey",
+      "column_name": "owner_id",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "owner_monthly",
+      "constraint_name": "owner_monthly_pkey",
+      "column_name": "month",
+      "ordinal_position": 2
+    },
+    {
+      "table_name": "owner_stats",
+      "constraint_name": "owner_stats_pkey",
+      "column_name": "owner_id",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "ranking_30d",
+      "constraint_name": "ranking_30d_pkey",
+      "column_name": "ig_code",
+      "ordinal_position": 1
+    }
+  ],
+  "foreign_keys": [
+    {
+      "table_name": "favorites",
+      "constraint_name": "favorites_ig_code_fkey",
+      "column_name": "ig_code",
+      "foreign_table_name": "ig_jobs",
+      "foreign_column_name": "ig_code",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE"
+    },
+    {
+      "table_name": "ig_jobs",
+      "constraint_name": "ig_jobs_owner_fk",
+      "column_name": "owner_id",
+      "foreign_table_name": "ig_accounts",
+      "foreign_column_name": "owner_id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "NO ACTION"
+    },
+    {
+      "table_name": "ig_jobs",
+      "constraint_name": "ig_jobs_owner_id_fk",
+      "column_name": "owner_id",
+      "foreign_table_name": "ig_accounts",
+      "foreign_column_name": "owner_id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL"
+    }
+  ],
+  "unique_constraints": [],
+  "check_constraints": [
+    {
+      "table_name": "embedding_cursor",
+      "constraint_name": "2200_17334_1_not_null",
+      "check_clause": "name IS NOT NULL"
+    },
+    {
+      "table_name": "embedding_cursor",
+      "constraint_name": "2200_17334_2_not_null",
+      "check_clause": "last_updated_at IS NOT NULL"
+    },
+    {
+      "table_name": "embedding_cursor",
+      "constraint_name": "2200_17334_3_not_null",
+      "check_clause": "last_ig_code IS NOT NULL"
+    },
+    {
+      "table_name": "embedding_cursor",
+      "constraint_name": "2200_17334_4_not_null",
+      "check_clause": "updated_at IS NOT NULL"
+    },
+    {
+      "table_name": "favorites",
+      "constraint_name": "2200_25033_1_not_null",
+      "check_clause": "user_id IS NOT NULL"
+    },
+    {
+      "table_name": "favorites",
+      "constraint_name": "2200_25033_2_not_null",
+      "check_clause": "ig_code IS NOT NULL"
+    },
+    {
+      "table_name": "favorites",
+      "constraint_name": "2200_25033_3_not_null",
+      "check_clause": "created_at IS NOT NULL"
+    },
+    {
+      "table_name": "ig_accounts",
+      "constraint_name": "2200_16397_1_not_null",
+      "check_clause": "owner_id IS NOT NULL"
+    },
+    {
+      "table_name": "ig_accounts",
+      "constraint_name": "2200_16397_5_not_null",
+      "check_clause": "created_at IS NOT NULL"
+    },
+    {
+      "table_name": "ig_accounts",
+      "constraint_name": "2200_16397_6_not_null",
+      "check_clause": "updated_at IS NOT NULL"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_history",
+      "constraint_name": "2200_79842_11_not_null",
+      "check_clause": "payload IS NOT NULL"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_history",
+      "constraint_name": "2200_79842_12_not_null",
+      "check_clause": "fetched_at IS NOT NULL"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_history",
+      "constraint_name": "2200_79842_1_not_null",
+      "check_clause": "id IS NOT NULL"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_history",
+      "constraint_name": "2200_79842_2_not_null",
+      "check_clause": "ig_code IS NOT NULL"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_latest",
+      "constraint_name": "2200_79856_10_not_null",
+      "check_clause": "payload IS NOT NULL"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_latest",
+      "constraint_name": "2200_79856_11_not_null",
+      "check_clause": "fetched_at IS NOT NULL"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_latest",
+      "constraint_name": "2200_79856_14_not_null",
+      "check_clause": "updated_at IS NOT NULL"
+    },
+    {
+      "table_name": "ig_apify_reels_raw_latest",
+      "constraint_name": "2200_79856_1_not_null",
+      "check_clause": "ig_code IS NOT NULL"
+    },
+    {
+      "table_name": "ig_jobs",
+      "constraint_name": "2200_16384_12_not_null",
+      "check_clause": "created_at IS NOT NULL"
+    },
+    {
+      "table_name": "ig_jobs",
+      "constraint_name": "2200_16384_1_not_null",
+      "check_clause": "ig_code IS NOT NULL"
+    },
+    {
+      "table_name": "ig_jobs",
+      "constraint_name": "2200_16384_2_not_null",
+      "check_clause": "canonical_url IS NOT NULL"
+    },
+    {
+      "table_name": "ig_jobs",
+      "constraint_name": "2200_16384_3_not_null",
+      "check_clause": "first_seen_at IS NOT NULL"
+    },
+    {
+      "table_name": "ig_jobs",
+      "constraint_name": "2200_16384_4_not_null",
+      "check_clause": "status IS NOT NULL"
+    },
+    {
+      "table_name": "ig_post_metrics",
+      "constraint_name": "2200_16497_11_not_null",
+      "check_clause": "fetched_at IS NOT NULL"
+    },
+    {
+      "table_name": "ig_post_metrics",
+      "constraint_name": "2200_16497_12_not_null",
+      "check_clause": "updated_at IS NOT NULL"
+    },
+    {
+      "table_name": "ig_post_metrics",
+      "constraint_name": "2200_16497_1_not_null",
+      "check_clause": "ig_code IS NOT NULL"
+    },
+    {
+      "table_name": "ig_post_metrics_latest_table",
+      "constraint_name": "2200_80707_12_not_null",
+      "check_clause": "updated_at IS NOT NULL"
+    },
+    {
+      "table_name": "ig_post_metrics_latest_table",
+      "constraint_name": "2200_80707_1_not_null",
+      "check_clause": "ig_code IS NOT NULL"
+    },
+    {
+      "table_name": "owner_monthly",
+      "constraint_name": "2200_17465_1_not_null",
+      "check_clause": "owner_id IS NOT NULL"
+    },
+    {
+      "table_name": "owner_monthly",
+      "constraint_name": "2200_17465_2_not_null",
+      "check_clause": "month IS NOT NULL"
+    },
+    {
+      "table_name": "owner_stats",
+      "constraint_name": "2200_17447_13_not_null",
+      "check_clause": "posts_with_transcript IS NOT NULL"
+    },
+    {
+      "table_name": "owner_stats",
+      "constraint_name": "2200_17447_14_not_null",
+      "check_clause": "posts_with_ja IS NOT NULL"
+    },
+    {
+      "table_name": "owner_stats",
+      "constraint_name": "2200_17447_1_not_null",
+      "check_clause": "owner_id IS NOT NULL"
+    },
+    {
+      "table_name": "owner_stats",
+      "constraint_name": "2200_17447_3_not_null",
+      "check_clause": "total_posts IS NOT NULL"
+    },
+    {
+      "table_name": "owner_stats",
+      "constraint_name": "2200_17447_4_not_null",
+      "check_clause": "transcribed IS NOT NULL"
+    },
+    {
+      "table_name": "owner_stats",
+      "constraint_name": "2200_17447_5_not_null",
+      "check_clause": "has_ja IS NOT NULL"
+    },
+    {
+      "table_name": "ranking_30d",
+      "constraint_name": "2200_17456_1_not_null",
+      "check_clause": "ig_code IS NOT NULL"
+    }
+  ],
+  "indexes": [
+    {
+      "schemaname": "public",
+      "tablename": "embedding_cursor",
+      "indexname": "embedding_cursor_pkey",
+      "indexdef": "CREATE UNIQUE INDEX embedding_cursor_pkey ON public.embedding_cursor USING btree (name)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "favorites",
+      "indexname": "favorites_created_at_idx",
+      "indexdef": "CREATE INDEX favorites_created_at_idx ON public.favorites USING btree (created_at DESC)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "favorites",
+      "indexname": "favorites_ig_code_idx",
+      "indexdef": "CREATE INDEX favorites_ig_code_idx ON public.favorites USING btree (ig_code)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "favorites",
+      "indexname": "favorites_pkey",
+      "indexdef": "CREATE UNIQUE INDEX favorites_pkey ON public.favorites USING btree (user_id, ig_code)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "favorites",
+      "indexname": "favorites_user_id_idx",
+      "indexdef": "CREATE INDEX favorites_user_id_idx ON public.favorites USING btree (user_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_accounts",
+      "indexname": "ig_accounts_pkey",
+      "indexdef": "CREATE UNIQUE INDEX ig_accounts_pkey ON public.ig_accounts USING btree (owner_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_accounts",
+      "indexname": "ig_accounts_username_idx",
+      "indexdef": "CREATE INDEX ig_accounts_username_idx ON public.ig_accounts USING btree (username)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_apify_reels_raw_history",
+      "indexname": "ig_apify_hist_igcode_fetched_idx",
+      "indexdef": "CREATE INDEX ig_apify_hist_igcode_fetched_idx ON public.ig_apify_reels_raw_history USING btree (ig_code, fetched_at DESC)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_apify_reels_raw_history",
+      "indexname": "ig_apify_hist_owner_fetched_idx",
+      "indexdef": "CREATE INDEX ig_apify_hist_owner_fetched_idx ON public.ig_apify_reels_raw_history USING btree (owner_id, fetched_at DESC)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_apify_reels_raw_history",
+      "indexname": "ig_apify_hist_owner_posted_idx",
+      "indexdef": "CREATE INDEX ig_apify_hist_owner_posted_idx ON public.ig_apify_reels_raw_history USING btree (owner_id, posted_at DESC)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_apify_reels_raw_history",
+      "indexname": "ig_apify_hist_payload_gin",
+      "indexdef": "CREATE INDEX ig_apify_hist_payload_gin ON public.ig_apify_reels_raw_history USING gin (payload)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_apify_reels_raw_history",
+      "indexname": "ig_apify_hist_run_igcode_uniq",
+      "indexdef": "CREATE UNIQUE INDEX ig_apify_hist_run_igcode_uniq ON public.ig_apify_reels_raw_history USING btree (apify_run_id, ig_code) WHERE (apify_run_id IS NOT NULL)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_apify_reels_raw_history",
+      "indexname": "ig_apify_reels_raw_history_igcode_fetched_at_idx",
+      "indexdef": "CREATE INDEX ig_apify_reels_raw_history_igcode_fetched_at_idx ON public.ig_apify_reels_raw_history USING btree (ig_code, fetched_at DESC)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_apify_reels_raw_history",
+      "indexname": "ig_apify_reels_raw_history_pkey",
+      "indexdef": "CREATE UNIQUE INDEX ig_apify_reels_raw_history_pkey ON public.ig_apify_reels_raw_history USING btree (id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_apify_reels_raw_latest",
+      "indexname": "ig_apify_latest_owner_fetched_idx",
+      "indexdef": "CREATE INDEX ig_apify_latest_owner_fetched_idx ON public.ig_apify_reels_raw_latest USING btree (owner_id, fetched_at DESC)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_apify_reels_raw_latest",
+      "indexname": "ig_apify_reels_raw_latest_pkey",
+      "indexdef": "CREATE UNIQUE INDEX ig_apify_reels_raw_latest_pkey ON public.ig_apify_reels_raw_latest USING btree (ig_code)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_jobs",
+      "indexname": "ig_jobs_created_at_idx",
+      "indexdef": "CREATE INDEX ig_jobs_created_at_idx ON public.ig_jobs USING btree (created_at)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_jobs",
+      "indexname": "ig_jobs_ig_code_covering_idx",
+      "indexdef": "CREATE INDEX ig_jobs_ig_code_covering_idx ON public.ig_jobs USING btree (ig_code) INCLUDE (owner_id, canonical_url, status, transcribed_at, updated_at)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_jobs",
+      "indexname": "ig_jobs_owner_id_idx",
+      "indexdef": "CREATE INDEX ig_jobs_owner_id_idx ON public.ig_jobs USING btree (owner_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_jobs",
+      "indexname": "ig_jobs_owner_status_updated_idx",
+      "indexdef": "CREATE INDEX ig_jobs_owner_status_updated_idx ON public.ig_jobs USING btree (owner_id, status, updated_at)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_jobs",
+      "indexname": "ig_jobs_pkey",
+      "indexdef": "CREATE UNIQUE INDEX ig_jobs_pkey ON public.ig_jobs USING btree (ig_code)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_jobs",
+      "indexname": "ig_jobs_status_updated_at_idx",
+      "indexdef": "CREATE INDEX ig_jobs_status_updated_at_idx ON public.ig_jobs USING btree (status, updated_at NULLS FIRST)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_post_metrics",
+      "indexname": "ig_post_metrics_engagement_rate_idx",
+      "indexdef": "CREATE INDEX ig_post_metrics_engagement_rate_idx ON public.ig_post_metrics USING btree (engagement_rate DESC)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_post_metrics",
+      "indexname": "ig_post_metrics_ig_code_covering_idx",
+      "indexdef": "CREATE INDEX ig_post_metrics_ig_code_covering_idx ON public.ig_post_metrics USING btree (ig_code) INCLUDE (owner_id, likes_count, video_view_count, comments_count, posted_at)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_post_metrics",
+      "indexname": "ig_post_metrics_owner_fetched_idx",
+      "indexdef": "CREATE INDEX ig_post_metrics_owner_fetched_idx ON public.ig_post_metrics USING btree (owner_id, fetched_at DESC)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_post_metrics",
+      "indexname": "ig_post_metrics_owner_ig_code_idx",
+      "indexdef": "CREATE INDEX ig_post_metrics_owner_ig_code_idx ON public.ig_post_metrics USING btree (owner_id, ig_code)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_post_metrics",
+      "indexname": "ig_post_metrics_owner_posted_idx",
+      "indexdef": "CREATE INDEX ig_post_metrics_owner_posted_idx ON public.ig_post_metrics USING btree (owner_id, posted_at DESC)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_post_metrics",
+      "indexname": "ig_post_metrics_pkey",
+      "indexdef": "CREATE UNIQUE INDEX ig_post_metrics_pkey ON public.ig_post_metrics USING btree (ig_code)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_post_metrics",
+      "indexname": "ig_post_metrics_posted_at_idx",
+      "indexdef": "CREATE INDEX ig_post_metrics_posted_at_idx ON public.ig_post_metrics USING btree (posted_at DESC)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_post_metrics",
+      "indexname": "ig_post_metrics_ranking_likes_views_idx",
+      "indexdef": "CREATE INDEX ig_post_metrics_ranking_likes_views_idx ON public.ig_post_metrics USING btree (posted_at DESC, video_view_count DESC, likes_count DESC) WHERE ((likes_count IS NOT NULL) AND (video_view_count IS NOT NULL) AND (video_view_count > 0))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ig_post_metrics_latest_table",
+      "indexname": "ig_post_metrics_latest_table_pkey",
+      "indexdef": "CREATE UNIQUE INDEX ig_post_metrics_latest_table_pkey ON public.ig_post_metrics_latest_table USING btree (ig_code)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "owner_monthly",
+      "indexname": "owner_monthly_owner_month_idx",
+      "indexdef": "CREATE INDEX owner_monthly_owner_month_idx ON public.owner_monthly USING btree (owner_id, month DESC)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "owner_monthly",
+      "indexname": "owner_monthly_pkey",
+      "indexdef": "CREATE UNIQUE INDEX owner_monthly_pkey ON public.owner_monthly USING btree (owner_id, month)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "owner_stats",
+      "indexname": "owner_stats_last_updated_idx",
+      "indexdef": "CREATE INDEX owner_stats_last_updated_idx ON public.owner_stats USING btree (last_updated_at DESC)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "owner_stats",
+      "indexname": "owner_stats_pkey",
+      "indexdef": "CREATE UNIQUE INDEX owner_stats_pkey ON public.owner_stats USING btree (owner_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "owner_time_series_cache",
+      "indexname": "idx_owner_time_series_cache",
+      "indexdef": "CREATE UNIQUE INDEX idx_owner_time_series_cache ON public.owner_time_series_cache USING btree (owner_id, month)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "owner_top_posts_cache",
+      "indexname": "idx_owner_top_posts_cache_owner_rank",
+      "indexdef": "CREATE INDEX idx_owner_top_posts_cache_owner_rank ON public.owner_top_posts_cache USING btree (owner_id, rank_by_likes)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "owner_top_posts_cache",
+      "indexname": "idx_owner_top_posts_cache_unique",
+      "indexdef": "CREATE UNIQUE INDEX idx_owner_top_posts_cache_unique ON public.owner_top_posts_cache USING btree (owner_id, ig_code)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "owner_transcripts_cache",
+      "indexname": "idx_owner_transcripts_cache_owner",
+      "indexdef": "CREATE INDEX idx_owner_transcripts_cache_owner ON public.owner_transcripts_cache USING btree (owner_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "owner_transcripts_cache",
+      "indexname": "idx_owner_transcripts_cache_unique",
+      "indexdef": "CREATE UNIQUE INDEX idx_owner_transcripts_cache_unique ON public.owner_transcripts_cache USING btree (owner_id, ig_code)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ranking_30d",
+      "indexname": "ranking_30d_owner_id_idx",
+      "indexdef": "CREATE INDEX ranking_30d_owner_id_idx ON public.ranking_30d USING btree (owner_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ranking_30d",
+      "indexname": "ranking_30d_pkey",
+      "indexdef": "CREATE UNIQUE INDEX ranking_30d_pkey ON public.ranking_30d USING btree (ig_code)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ranking_30d",
+      "indexname": "ranking_30d_score_idx",
+      "indexdef": "CREATE INDEX ranking_30d_score_idx ON public.ranking_30d USING btree (total_score DESC)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ranking_30d",
+      "indexname": "ranking_30d_total_score_idx",
+      "indexdef": "CREATE INDEX ranking_30d_total_score_idx ON public.ranking_30d USING btree (total_score DESC)"
+    }
+  ],
+  "index_details": [],
+  "views": [
+    {
+      "table_schema": "public",
+      "table_name": "ig_post_metrics_latest",
+      "view_definition": " SELECT DISTINCT ON (ig_code) ig_code,\n    owner_id,\n    owner_username,\n    posted_at,\n    likes_count,\n    comments_count,\n    video_view_count,\n    video_play_count,\n    video_duration_sec,\n    fetched_at,\n    apify_actor_id\n   FROM ig_apify_reels_raw_history\n  ORDER BY ig_code, fetched_at DESC;"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "ig_reel_growth",
+      "view_definition": " SELECT h1.ig_code,\n    h1.owner_id,\n    h1.fetched_at AS from_at,\n    h2.fetched_at AS to_at,\n    (h2.video_play_count - h1.video_play_count) AS play_diff,\n    (h2.video_view_count - h1.video_view_count) AS view_diff,\n    (EXTRACT(epoch FROM (h2.fetched_at - h1.fetched_at)) / (3600)::numeric) AS hours_diff,\n        CASE\n            WHEN (EXTRACT(epoch FROM (h2.fetched_at - h1.fetched_at)) = (0)::numeric) THEN NULL::numeric\n            ELSE (((h2.video_play_count - h1.video_play_count))::numeric / (EXTRACT(epoch FROM (h2.fetched_at - h1.fetched_at)) / (3600)::numeric))\n        END AS play_per_hour\n   FROM (ig_apify_reels_raw_history h1\n     JOIN ig_apify_reels_raw_history h2 ON (((h1.ig_code = h2.ig_code) AND (h2.fetched_at > h1.fetched_at))));"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "ig_reel_growth_latest",
+      "view_definition": " SELECT ig_code,\n    owner_id,\n    owner_username,\n    posted_at,\n    from_at,\n    to_at,\n    play_diff,\n    view_diff,\n    hours_diff,\n        CASE\n            WHEN (hours_diff = (0)::numeric) THEN NULL::numeric\n            ELSE ((play_diff)::numeric / hours_diff)\n        END AS play_per_hour\n   FROM ( SELECT ig_apify_reels_raw_history.ig_code,\n            ig_apify_reels_raw_history.owner_id,\n            ig_apify_reels_raw_history.owner_username,\n            ig_apify_reels_raw_history.posted_at,\n            lag(ig_apify_reels_raw_history.fetched_at) OVER (PARTITION BY ig_apify_reels_raw_history.ig_code ORDER BY ig_apify_reels_raw_history.fetched_at) AS from_at,\n            ig_apify_reels_raw_history.fetched_at AS to_at,\n            (ig_apify_reels_raw_history.video_play_count - lag(ig_apify_reels_raw_history.video_play_count) OVER (PARTITION BY ig_apify_reels_raw_history.ig_code ORDER BY ig_apify_reels_raw_history.fetched_at)) AS play_diff,\n            (ig_apify_reels_raw_history.video_view_count - lag(ig_apify_reels_raw_history.video_view_count) OVER (PARTITION BY ig_apify_reels_raw_history.ig_code ORDER BY ig_apify_reels_raw_history.fetched_at)) AS view_diff,\n            (EXTRACT(epoch FROM (ig_apify_reels_raw_history.fetched_at - lag(ig_apify_reels_raw_history.fetched_at) OVER (PARTITION BY ig_apify_reels_raw_history.ig_code ORDER BY ig_apify_reels_raw_history.fetched_at))) / (3600)::numeric) AS hours_diff\n           FROM ig_apify_reels_raw_history) t\n  WHERE (from_at IS NOT NULL);"
+    }
+  ],
+  "materialized_views": [
+    {
+      "schemaname": "public",
+      "matviewname": "owner_time_series_cache",
+      "hasindexes": true,
+      "ispopulated": true
+    },
+    {
+      "schemaname": "public",
+      "matviewname": "owner_top_posts_cache",
+      "hasindexes": true,
+      "ispopulated": true
+    },
+    {
+      "schemaname": "public",
+      "matviewname": "owner_transcripts_cache",
+      "hasindexes": true,
+      "ispopulated": true
+    }
+  ],
+  "materialized_view_definitions": [
+    {
+      "schema_name": "public",
+      "view_name": "owner_time_series_cache",
+      "view_definition": " SELECT owner_id,\n    date_trunc('month'::text, posted_at) AS month,\n    count(*) AS post_count,\n    avg(likes_count) AS avg_likes,\n    avg(comments_count) AS avg_comments,\n    avg(video_view_count) AS avg_views\n   FROM ig_post_metrics\n  WHERE posted_at IS NOT NULL\n  GROUP BY owner_id, (date_trunc('month'::text, posted_at));"
+    },
+    {
+      "schema_name": "public",
+      "view_name": "owner_top_posts_cache",
+      "view_definition": " SELECT m.owner_id,\n    m.ig_code,\n    m.likes_count,\n    m.comments_count,\n    m.video_view_count,\n    m.posted_at,\n        CASE\n            WHEN j.transcript_text IS NOT NULL THEN true\n            ELSE false\n        END AS has_transcript,\n        CASE\n            WHEN j.transcript_ja IS NOT NULL THEN true\n            ELSE false\n        END AS has_ja,\n    row_number() OVER (PARTITION BY m.owner_id ORDER BY m.likes_count DESC NULLS LAST) AS rank_by_likes\n   FROM ig_post_metrics m\n     LEFT JOIN ig_jobs j ON j.ig_code = m.ig_code\n  WHERE m.likes_count IS NOT NULL;"
+    },
+    {
+      "schema_name": "public",
+      "view_name": "owner_transcripts_cache",
+      "view_definition": " SELECT m.owner_id,\n    j.transcript_text,\n    j.ig_code\n   FROM ig_jobs j\n     JOIN ig_post_metrics m ON m.ig_code = j.ig_code\n  WHERE j.transcript_text IS NOT NULL AND j.transcript_text <> ''::text;"
+    }
+  ],
+  "functions": [
+    {
+      "schema_name": "public",
+      "function_name": "refresh_analytics_cache",
+      "arguments": "",
+      "return_type": "void",
+      "kind": "f",
+      "kind_description": "function"
+    }
+  ],
+  "function_definitions": [
+    {
+      "schema_name": "public",
+      "function_name": "refresh_analytics_cache",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.refresh_analytics_cache()\n RETURNS void\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n  REFRESH MATERIALIZED VIEW CONCURRENTLY owner_time_series_cache;\n  REFRESH MATERIALIZED VIEW CONCURRENTLY owner_top_posts_cache;\n  REFRESH MATERIALIZED VIEW CONCURRENTLY owner_transcripts_cache;\nEND;\n$function$\n"
+    }
+  ],
+  "triggers": [],
+  "sequences": [
+    {
+      "sequence_schema": "public",
+      "sequence_name": "ig_apify_reels_raw_history_id_seq",
+      "data_type": "bigint",
+      "numeric_precision": 64,
+      "numeric_precision_radix": 2,
+      "numeric_scale": 0,
+      "start_value": "1",
+      "minimum_value": "1",
+      "maximum_value": "9223372036854775807",
+      "increment": "1",
+      "cycle_option": "NO"
+    }
+  ],
+  "sequence_list": [
+    {
+      "schemaname": "public",
+      "sequencename": "ig_apify_reels_raw_history_id_seq"
+    }
+  ]
+}
