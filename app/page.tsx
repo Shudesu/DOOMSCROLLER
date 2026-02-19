@@ -2,30 +2,20 @@
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import TopicCard from '@/components/TopicCard';
-import type { SourcePost } from '@/components/TopicCard';
+import PostCard from '@/components/TopicCard';
+import type { ClassifiedPost } from '@/components/TopicCard';
 import ReelDetailModal from '@/components/ReelDetailModal';
 import LoadingSpinner from '@/components/LoadingSpinner';
-
-interface Topic {
-  title: string;
-  hook: string;
-  outline: string;
-  why: string;
-  reference_codes: string[];
-  estimated_engagement: 'high' | 'medium';
-}
 
 interface HARMCategory {
   category: 'health' | 'ambition' | 'relationship' | 'money';
   label: string;
-  topics: Topic[];
+  posts: ClassifiedPost[];
 }
 
 interface RecommendationsResponse {
   generated_at: string;
   categories: HARMCategory[];
-  source_posts: SourcePost[];
 }
 
 const CATEGORY_CONFIG: Record<
@@ -77,10 +67,15 @@ export default function Home() {
     setIsModalOpen(true);
   };
 
-  const selectedOwnerId = selectedReel
-    ? data?.source_posts.find((p) => p.ig_code === selectedReel)
-        ?.owner_username || 'unknown'
-    : null;
+  // Find owner_id from the categories data
+  const selectedOwnerId = (() => {
+    if (!selectedReel || !data) return null;
+    for (const cat of data.categories) {
+      const post = cat.posts.find((p) => p.ig_code === selectedReel);
+      if (post) return post.owner_username || 'unknown';
+    }
+    return null;
+  })();
 
   return (
     <div className="min-h-screen bg-gray-50/50">
@@ -104,7 +99,7 @@ export default function Home() {
             <h1 className="text-xl font-bold text-gray-900">今日これ撮れ</h1>
           </div>
           <p className="text-sm text-gray-500">
-            直近30日間のバズ投稿をHARMジャンル別に分析。台本をそのまま参考にして撮影しよう
+            バズ投稿をHARMジャンル別に分類。タップして台本を確認、そのまま撮影へ
           </p>
           {data?.generated_at && (
             <p className="text-xs text-gray-400 mt-1">
@@ -136,7 +131,8 @@ export default function Home() {
         {data && (
           <div className="space-y-8">
             {data.categories.map((cat) => {
-              const config = CATEGORY_CONFIG[cat.category] || CATEGORY_CONFIG.ambition;
+              const config =
+                CATEGORY_CONFIG[cat.category] || CATEGORY_CONFIG.ambition;
               return (
                 <section key={cat.category}>
                   {/* Category Header */}
@@ -148,17 +144,16 @@ export default function Home() {
                       {cat.label}
                     </h2>
                     <span className="text-xs text-gray-400 ml-auto">
-                      {cat.topics.length}件
+                      {cat.posts.length}件
                     </span>
                   </div>
 
-                  {/* Topic Cards Grid */}
+                  {/* Post Cards Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {cat.topics.map((topic, i) => (
-                      <TopicCard
-                        key={`${cat.category}-${i}`}
-                        {...topic}
-                        source_posts={data.source_posts}
+                    {cat.posts.map((post) => (
+                      <PostCard
+                        key={post.ig_code}
+                        post={post}
                         onReelClick={handleReelClick}
                       />
                     ))}
