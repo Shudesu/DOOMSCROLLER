@@ -28,6 +28,7 @@ interface ReelDetail {
   comments_count: number | null;
   posted_at: string | null;
   engagement_rate: number | null;
+  video_r2_key: string | null;
   is_favorite?: boolean;
 }
 
@@ -522,7 +523,17 @@ export default function ReelDetailModal({
                   </div>
                   
                   {/* Video Player */}
-                  {embedUrl && (
+                  {reelWithFavorite?.video_r2_key ? (
+                    <div className="mb-6 w-full bg-black rounded-xl overflow-hidden shadow-lg flex items-center justify-center">
+                      <video
+                        src={`/api/video/${reelWithFavorite.ig_code}`}
+                        controls
+                        playsInline
+                        className="w-full h-[400px] object-contain"
+                        preload="metadata"
+                      />
+                    </div>
+                  ) : embedUrl ? (
                     <div className="mb-6 w-full bg-black rounded-xl overflow-hidden shadow-lg">
                       <iframe
                         src={embedUrl}
@@ -532,7 +543,7 @@ export default function ReelDetailModal({
                         title="Instagram embed - Original"
                       />
                     </div>
-                  )}
+                  ) : null}
 
                   {/* Engagement Info - Compact Unified Design */}
                   <div className="mb-6 grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -701,7 +712,17 @@ export default function ReelDetailModal({
                   ) : selectedSimilarReelWithFavorite ? (
                     <div>
                       {/* Video Player */}
-                      {(() => {
+                      {selectedSimilarReelWithFavorite.video_r2_key ? (
+                        <div className="mb-6 w-full bg-black rounded-xl overflow-hidden shadow-lg flex items-center justify-center">
+                          <video
+                            src={`/api/video/${selectedSimilarReelWithFavorite.ig_code}`}
+                            controls
+                            playsInline
+                            className="w-full h-[400px] object-contain"
+                            preload="metadata"
+                          />
+                        </div>
+                      ) : (() => {
                         const similarEmbedUrl = getEmbedUrl(selectedSimilarReelWithFavorite.canonical_url || null);
                         return similarEmbedUrl ? (
                           <div className="mb-6 w-full bg-black rounded-xl overflow-hidden shadow-lg">
@@ -984,7 +1005,17 @@ export default function ReelDetailModal({
               {/* Video Player (only in list view) */}
               {viewMode === 'list' && (
                 <div className="w-full md:w-96 flex-shrink-0 bg-gray-100/80 flex items-center justify-center p-4 md:p-6 order-1 md:order-2">
-                  {embedUrl ? (
+                  {reelWithFavorite?.video_r2_key ? (
+                    <div className="w-full h-[300px] md:h-[600px] bg-black rounded-xl overflow-hidden shadow-lg flex items-center justify-center">
+                      <video
+                        src={`/api/video/${reelWithFavorite.ig_code}`}
+                        controls
+                        playsInline
+                        className="w-full h-full object-contain"
+                        preload="metadata"
+                      />
+                    </div>
+                  ) : embedUrl ? (
                     <div className="w-full h-[300px] md:h-[600px] bg-black rounded-xl overflow-hidden shadow-lg">
                       <iframe
                         src={embedUrl}

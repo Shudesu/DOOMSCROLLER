@@ -20,7 +20,8 @@ async function getCachedReelDetail(ig_code: string) {
       j.transcript_text,
       j.transcript_ja,
       j.transcribed_at,
-      j.updated_at
+      j.updated_at,
+      j.video_r2_key
     FROM public.ig_jobs j
     FULL OUTER JOIN public.ig_post_metrics m ON m.ig_code = j.ig_code
     WHERE COALESCE(m.ig_code, j.ig_code) = $1
@@ -42,6 +43,7 @@ async function getCachedReelDetail(ig_code: string) {
     transcript_ja: string | null;
     transcribed_at: Date | null;
     updated_at: Date | null;
+    video_r2_key: string | null;
   }>(sql, [ig_code]);
 
   if (result.rows.length === 0) {
@@ -65,6 +67,7 @@ async function getCachedReelDetail(ig_code: string) {
     comments_count: row.comments_count,
     posted_at: row.posted_at?.toISOString() || null,
     engagement_rate: row.engagement_rate ? parseFloat(row.engagement_rate) : null,
+    video_r2_key: row.video_r2_key,
   };
 }
 
