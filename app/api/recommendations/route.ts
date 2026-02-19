@@ -69,7 +69,6 @@ async function generateRecommendations() {
     WHERE j.transcript_ja IS NOT NULL AND j.transcript_ja != ''
       AND (r.owner_username IS NULL OR r.owner_username NOT IN (${excludePlaceholders}))
     ORDER BY r.total_score DESC
-    LIMIT 50
   `;
 
   const result = await query<RankingRow>(sql, EXCLUDED_ACCOUNTS);
@@ -77,7 +76,7 @@ async function generateRecommendations() {
   const postsForLLM = result.rows.map((row, i) => ({
     i: i + 1,
     c: row.ig_code,
-    s: row.transcript_ja.slice(0, 300),
+    s: row.transcript_ja.slice(0, 200),
   }));
 
   const completion = await openai.chat.completions.create({
@@ -138,7 +137,7 @@ async function generateRecommendations() {
   const genres: GenreGroup[] = GENRES.map((g) => ({
     genre: g,
     label: GENRE_LABELS[g],
-    posts: genreMap[g].slice(0, 10),
+    posts: genreMap[g],
   })).filter((g) => g.posts.length > 0);
 
   return {
@@ -151,7 +150,7 @@ export async function GET() {
   try {
     const cached = unstable_cache(
       generateRecommendations,
-      ['recommendations-v4'],
+      ['recommendations-v5'],
       { revalidate: 86400, tags: ['recommendations'] }
     );
 
