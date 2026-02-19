@@ -176,7 +176,7 @@ async function upsertReel(item: any): Promise<{ inserted_raw: number; upserted_m
         now(),
         CASE
           WHEN video_view_count IS NOT NULL AND video_view_count > 0
-          THEN (likes_count::numeric + COALESCE(comments_count, 0)::numeric) / video_view_count::numeric
+          THEN (likes_count::double precision / video_view_count::double precision)
           ELSE NULL
         END
       FROM inserted
@@ -268,19 +268,12 @@ async function updateAudioUrl(igCode: string): Promise<void> {
 // n8n "last_collected_at" — アカウントの最終収集時刻を更新
 async function updateLastCollectedAt(ownerId: string): Promise<void> {
   await pool.query(`
-    WITH ensured AS (
-      INSERT INTO public.ig_accounts (owner_id, created_at, updated_at)
-      VALUES ($1, now(), now())
-      ON CONFLICT (owner_id) DO UPDATE
-        SET updated_at = EXCLUDED.updated_at
-      RETURNING owner_id
-    )
     UPDATE public.ig_accounts
     SET
       last_collected_at = now(),
       updated_at = now(),
       error_message = NULL
-    WHERE owner_id = (SELECT owner_id FROM ensured);
+    WHERE owner_id = $1;
   `, [ownerId]);
 }
 

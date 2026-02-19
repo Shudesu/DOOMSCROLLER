@@ -1,0 +1,22 @@
+{
+  "name": "doomscroller-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "update-status": "tsx update-status.ts",
+    "collect-audio": "tsx collect-audio.ts",
+    "transcribe": "tsx transcribe.ts",
+    "translate-ja": "tsx translate-ja.ts",
+    "embed": "tsx embed.ts",
+    "aggregate": "tsx aggregate.ts",
+    "tier-recompute": "tsx tier-recompute.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.993.0",
+    "@aws-sdk/s3-request-presigner": "^3.993.0",
+    "dotenv": "^17.2.3",
+    "pg": "^8.11.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.0.0"
+  }
+}
