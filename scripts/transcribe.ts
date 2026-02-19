@@ -74,7 +74,7 @@ async function downloadAudio(url: string): Promise<Buffer> {
 // Call OpenAI Whisper API
 async function transcribeAudio(audioBuffer: Buffer, filename: string): Promise<string> {
   const formData = new FormData();
-  formData.append('file', new Blob([audioBuffer], { type: 'audio/mpeg' }), filename);
+  formData.append('file', new Blob([new Uint8Array(audioBuffer)], { type: 'audio/mpeg' }), filename);
   formData.append('model', 'whisper-1');
 
   const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
