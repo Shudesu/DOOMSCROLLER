@@ -68,14 +68,15 @@ npm run lint   # ESLint実行
 - **数値表示**: 万・千単位の日本語フォーマット
 - **言語**: UIは日本語、コード・変数名は英語
 
+### Deployment
+- **Vercel**: https://doomscroller-beige.vercel.app
+- **GitHub**: https://github.com/Shudesu/DOOMSCROLLER (private)
+- 環境変数: DATABASE_URL, NEON_EMBEDDING_DATABASE_URL, OPENAI_API_KEY, USER_ID
+- pushすると自動デプロイ
+
 ### Known Issues (UI/UX)
-- モバイル対応なし（Tailwindブレークポイント未使用）
-- サイドバーが固定表示のみ（ドロワー/折りたたみ機能なし）
-- 見出しサイズの不統一（text-2xl/text-3xl混在）
 - ReelDetailModalが巨大（分割候補）
-- テーブルのモバイル表示未対応
-- 認証機能なし
-- デプロイ設定なし
+- 認証機能なし（パブリック）
 
 ## Database Tables (Main)
 - `ig_jobs` - 台本データ（ig_code PK, transcript_text, transcript_ja）
