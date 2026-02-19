@@ -8,15 +8,16 @@
 
 -- 1. 全テーブルの行数とサイズ
 SELECT 
-    schemaname,
-    tablename,
-    pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) AS total_size,
-    pg_size_pretty(pg_relation_size(schemaname||'.'||tablename)) AS table_size,
-    pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename) - pg_relation_size(schemaname||'.'||tablename)) AS indexes_size,
-    (SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = schemaname AND table_name = tablename) as exists
-FROM pg_tables
-WHERE schemaname = 'public'
-ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;
+    table_schema as schemaname,
+    table_name as tablename,
+    pg_size_pretty(pg_total_relation_size(table_schema||'.'||table_name)) AS total_size,
+    pg_size_pretty(pg_relation_size(table_schema||'.'||table_name)) AS table_size,
+    pg_size_pretty(pg_total_relation_size(table_schema||'.'||table_name) - pg_relation_size(table_schema||'.'||table_name)) AS indexes_size,
+    1 as exists
+FROM information_schema.tables
+WHERE table_schema = 'public'
+  AND table_type = 'BASE TABLE'
+ORDER BY pg_total_relation_size(table_schema||'.'||table_name) DESC;
 
 -- 2. 各テーブルの行数（実際のカウント）
 SELECT 
@@ -572,14 +573,15 @@ ORDER BY
 
 -- 28. 大きなテーブルのサイズ確認（パフォーマンス影響）
 SELECT 
-    t.schemaname,
-    t.tablename,
-    pg_size_pretty(pg_total_relation_size(t.schemaname||'.'||t.tablename)) AS total_size,
-    pg_size_pretty(pg_relation_size(t.schemaname||'.'||t.tablename)) AS table_size,
-    pg_size_pretty(pg_total_relation_size(t.schemaname||'.'||t.tablename) - pg_relation_size(t.schemaname||'.'||t.tablename)) AS indexes_size,
+    t.table_schema as schemaname,
+    t.table_name as tablename,
+    pg_size_pretty(pg_total_relation_size(t.table_schema||'.'||t.table_name)) AS total_size,
+    pg_size_pretty(pg_relation_size(t.table_schema||'.'||t.table_name)) AS table_size,
+    pg_size_pretty(pg_total_relation_size(t.table_schema||'.'||t.table_name) - pg_relation_size(t.table_schema||'.'||t.table_name)) AS indexes_size,
     COALESCE(s.n_live_tup, 0) as estimated_rows
-FROM pg_tables t
-LEFT JOIN pg_stat_user_tables s ON s.schemaname = t.schemaname AND s.relname = t.tablename
-WHERE t.schemaname = 'public'
-  AND pg_total_relation_size(t.schemaname||'.'||t.tablename) > 100 * 1024 * 1024  -- 100MB以上
-ORDER BY pg_total_relation_size(t.schemaname||'.'||t.tablename) DESC;
+FROM information_schema.tables t
+LEFT JOIN pg_stat_user_tables s ON s.schemaname = t.table_schema AND s.relname = t.table_name
+WHERE t.table_schema = 'public'
+  AND t.table_type = 'BASE TABLE'
+  AND pg_total_relation_size(t.table_schema||'.'||t.table_name) > 100 * 1024 * 1024  -- 100MB以上
+ORDER BY pg_total_relation_size(t.table_schema||'.'||t.table_name) DESC;

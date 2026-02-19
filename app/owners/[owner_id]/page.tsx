@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import InlineSpinner from '@/components/InlineSpinner';
 import ReelDetailModal from '@/components/ReelDetailModal';
 import { useToast } from '@/components/ToastProvider';
 
@@ -83,11 +84,10 @@ export default function OwnerDetailPage() {
   // モーダルを閉じた後も選択状態を保持
   const [lastSelectedReel, setLastSelectedReel] = useState<string | null>(null);
   const [copying, setCopying] = useState<'en' | 'ja' | null>(null);
-  const [reelsOffset, setReelsOffset] = useState(0);
-  const [accumulatedReels, setAccumulatedReels] = useState<Reel[]>([]);
-  const [hasMoreReels, setHasMoreReels] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { showToast } = useToast();
+  const pageSize = 50;
 
   // Analytics を React Query で取得
   const { data: analytics, isLoading: analyticsLoading, error: analyticsError, refetch: refetchAnalytics } = useQuery({
@@ -105,10 +105,11 @@ export default function OwnerDetailPage() {
   });
 
   // Reels を React Query で取得（時系列順に並べる：最新が上、古いものが下）
-  const { data: fetchedReels = [], isLoading: reelsLoading } = useQuery<Reel[]>({
-    queryKey: ['reels', ownerId, reelsOffset, 'posted_at', 'desc'],
+  const { data: currentReels = [], isLoading: reelsLoading } = useQuery<Reel[]>({
+    queryKey: ['reels', ownerId, currentPage, 'posted_at', 'desc'],
     queryFn: async () => {
-      const response = await fetch(`/api/owners/${ownerId}/reels?limit=50&offset=${reelsOffset}&sort=posted_at&order=desc`);
+      const offset = (currentPage - 1) * pageSize;
+      const response = await fetch(`/api/owners/${ownerId}/reels?limit=${pageSize}&offset=${offset}&sort=posted_at&order=desc`);
       if (!response.ok) {
         throw new Error('Failed to fetch reels');
       }
@@ -124,37 +125,14 @@ export default function OwnerDetailPage() {
     enabled: !!ownerId,
   });
 
-  // 累積的にリールを保持
+  // ownerIdが変更されたら、ページをリセット
   useEffect(() => {
-    if (reelsOffset === 0) {
-      // 最初のロード時は、取得したデータをそのまま設定
-      setAccumulatedReels(fetchedReels);
-      setHasMoreReels(fetchedReels.length === 50);
-    } else {
-      // 追加ロード時は、既存のデータに追加（重複を避ける）
-      setAccumulatedReels((prev) => {
-        const existingCodes = new Set(prev.map((r) => r.ig_code));
-        const newReels = fetchedReels.filter((r) => !existingCodes.has(r.ig_code));
-        const combined = [...prev, ...newReels];
-        // 再度ソート（posted_atがNULLの場合はfetched_atでソート）
-        return combined.sort((a, b) => {
-          const aDate = a.posted_at ? new Date(a.posted_at).getTime() : (a.fetched_at ? new Date(a.fetched_at).getTime() : 0);
-          const bDate = b.posted_at ? new Date(b.posted_at).getTime() : (b.fetched_at ? new Date(b.fetched_at).getTime() : 0);
-          return bDate - aDate; // DESC: 新しいものが上
-        });
-      });
-      setHasMoreReels(fetchedReels.length === 50);
-    }
-  }, [fetchedReels, reelsOffset]);
-
-  // ownerIdが変更されたら、累積データをリセット
-  useEffect(() => {
-    setAccumulatedReels([]);
-    setReelsOffset(0);
-    setHasMoreReels(true);
+    setCurrentPage(1);
   }, [ownerId]);
 
-  const allReels = accumulatedReels;
+  // 総ページ数を計算
+  const totalPosts = analytics?.overview.total_posts || 0;
+  const totalPages = Math.ceil(totalPosts / pageSize);
 
   // Similar Owners を React Query で取得
   const { data: similarOwners = [], isLoading: loadingSimilar } = useQuery<SimilarOwner[]>({
@@ -183,10 +161,6 @@ export default function OwnerDetailPage() {
     enabled: !!ownerId,
   });
 
-  const fetchAllReels = async () => {
-    setReelsOffset((prev) => prev + 50);
-    // React Queryが自動的に再取得する
-  };
 
   const formatSimilarity = (similarity: number): string => {
     return `${(similarity * 100).toFixed(1)}%`;
@@ -251,7 +225,7 @@ export default function OwnerDetailPage() {
 
   if (analyticsError) {
     return (
-      <div className="px-8 py-10">
+      <div className="px-4 py-6 md:px-8 md:py-10">
         <div className="max-w-2xl mx-auto bg-red-50/80 border border-red-200/60 rounded-2xl p-6 shadow-sm">
           <p className="text-red-800 font-semibold text-base mb-2">エラーが発生しました</p>
           <p className="text-red-600 text-sm mb-4">
@@ -264,7 +238,7 @@ export default function OwnerDetailPage() {
 
   if (!analytics) {
     return (
-      <div className="px-8 py-10">
+      <div className="px-4 py-6 md:px-8 md:py-10">
         <div className="text-center py-16">
           <p className="text-gray-500 text-base">データが見つかりませんでした</p>
         </div>
@@ -273,7 +247,7 @@ export default function OwnerDetailPage() {
   }
 
   return (
-    <div className="px-8 py-10">
+    <div className="px-4 py-6 md:px-8 md:py-10">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <button
@@ -284,7 +258,7 @@ export default function OwnerDetailPage() {
           </button>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-semibold text-gray-900 tracking-tight mb-1">
+              <h1 className="text-2xl font-bold text-gray-900 tracking-tight mb-1">
                 {ownerUsername || ownerId}
               </h1>
               <p className="text-sm text-gray-500">アカウントの詳細情報と分析</p>
@@ -329,11 +303,7 @@ export default function OwnerDetailPage() {
                         className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-between"
                       >
                         <span>{copying === 'en' ? 'コピー中...' : '英語台本を一括コピー'}</span>
-                        {copying === 'en' && (
-                          <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-3.357-5.357M20 15v5h-5" />
-                          </svg>
-                        )}
+                        {copying === 'en' && <InlineSpinner size="sm" />}
                       </button>
                       <button
                         onClick={() => {
@@ -344,11 +314,7 @@ export default function OwnerDetailPage() {
                         className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-between"
                       >
                         <span>{copying === 'ja' ? 'コピー中...' : '日本語台本を一括コピー'}</span>
-                        {copying === 'ja' && (
-                          <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-3.357-5.357M20 15v5h-5" />
-                          </svg>
-                        )}
+                        {copying === 'ja' && <InlineSpinner size="sm" />}
                       </button>
                       <div className="border-t border-gray-200/60 my-1" />
                       <button
@@ -624,7 +590,7 @@ export default function OwnerDetailPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {allReels.map((reel) => (
+                    {currentReels.map((reel) => (
                       <tr
                         key={reel.ig_code}
                         className={`border-b border-gray-200/60 cursor-pointer transition-colors ${
@@ -655,15 +621,66 @@ export default function OwnerDetailPage() {
                   </tbody>
                 </table>
               </div>
-              {hasMoreReels && (
-                <div className="mt-6 text-center">
-                  <button
-                    onClick={() => fetchAllReels()}
-                    disabled={reelsLoading}
-                    className="px-6 py-2.5 bg-slate-700 text-white text-sm font-medium rounded-xl hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
-                  >
-                    {reelsLoading ? '読み込み中...' : 'もっと見る'}
-                  </button>
+              {/* ページネーション */}
+              {totalPosts > 0 && (
+                <div className="mt-6 flex items-center justify-between">
+                  <div className="text-sm text-gray-600">
+                    {((currentPage - 1) * pageSize + 1)} - {Math.min(currentPage * pageSize, totalPosts)} / {totalPosts} 件
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => {
+                        const newPage = Math.max(1, currentPage - 1);
+                        setCurrentPage(newPage);
+                      }}
+                      disabled={currentPage === 1 || reelsLoading}
+                      className="px-4 py-2 text-sm border border-gray-300 rounded-xl bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
+                    >
+                      前へ
+                    </button>
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                        let pageNum: number;
+                        
+                        if (totalPages <= 5) {
+                          pageNum = i + 1;
+                        } else if (currentPage <= 3) {
+                          pageNum = i + 1;
+                        } else if (currentPage >= totalPages - 2) {
+                          pageNum = totalPages - 4 + i;
+                        } else {
+                          pageNum = currentPage - 2 + i;
+                        }
+                        
+                        return (
+                          <button
+                            key={pageNum}
+                            onClick={() => {
+                              setCurrentPage(pageNum);
+                            }}
+                            disabled={reelsLoading}
+                            className={`px-3 py-2 text-sm rounded-xl transition-all ${
+                              currentPage === pageNum
+                                ? 'bg-slate-700 text-white font-medium'
+                                : 'border border-gray-300 bg-white hover:bg-gray-50 text-gray-700'
+                            } disabled:opacity-50 disabled:cursor-not-allowed shadow-sm`}
+                          >
+                            {pageNum}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <button
+                      onClick={() => {
+                        const newPage = currentPage + 1;
+                        setCurrentPage(newPage);
+                      }}
+                      disabled={currentPage >= totalPages || reelsLoading}
+                      className="px-4 py-2 text-sm border border-gray-300 rounded-xl bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
+                    >
+                      次へ
+                    </button>
+                  </div>
                 </div>
               )}
             </div>

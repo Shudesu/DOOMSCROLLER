@@ -117,9 +117,9 @@ export default function DiagnosePage() {
 
   if (error) {
     return (
-      <div className="px-8 py-10">
+      <div className="px-4 py-6 md:px-8 md:py-10">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-semibold text-gray-900 tracking-tight mb-6">データベース診断</h1>
+          <h1 className="text-2xl font-bold text-gray-900 tracking-tight mb-6">データベース診断</h1>
           <div className="bg-red-50/80 border border-red-200/60 rounded-2xl p-6 shadow-sm">
             <p className="text-red-800 font-semibold text-base mb-2">エラーが発生しました</p>
             <p className="text-red-600 text-sm mb-4">{error}</p>
@@ -137,9 +137,9 @@ export default function DiagnosePage() {
 
   if (!data) {
     return (
-      <div className="px-8 py-10">
+      <div className="px-4 py-6 md:px-8 md:py-10">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-semibold text-gray-900 tracking-tight mb-6">データベース診断</h1>
+          <h1 className="text-2xl font-bold text-gray-900 tracking-tight mb-6">データベース診断</h1>
           <div className="text-center py-16">
             <p className="text-gray-500 text-base">データがありません</p>
           </div>
@@ -149,11 +149,11 @@ export default function DiagnosePage() {
   }
 
   return (
-    <div className="px-8 py-10">
+    <div className="px-4 py-6 md:px-8 md:py-10">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-semibold text-gray-900 tracking-tight mb-1">データベース診断</h1>
+            <h1 className="text-2xl font-bold text-gray-900 tracking-tight mb-1">データベース診断</h1>
             <p className="text-sm text-gray-500">データベースの状態を確認・診断</p>
           </div>
           <button
@@ -351,7 +351,7 @@ export default function DiagnosePage() {
                         )}
                       </div>
                     </div>
-                    <span className="text-gray-400 text-xl ml-4">
+                    <span className="text-gray-500 text-xl ml-4">
                       {expandedQueries.has(result.queryName) ? '▼' : '▶'}
                     </span>
                   </div>
@@ -376,7 +376,7 @@ export default function DiagnosePage() {
                               {Object.values(row).map((value: any, colIndex) => (
                                 <td key={colIndex} className="px-4 py-3 text-sm text-gray-700">
                                   {value === null || value === undefined
-                                    ? <span className="text-gray-400 italic">NULL</span>
+                                    ? <span className="text-gray-500 italic">NULL</span>
                                     : typeof value === 'boolean'
                                     ? (
                                         <span className={value ? 'text-green-600' : 'text-red-600'}>

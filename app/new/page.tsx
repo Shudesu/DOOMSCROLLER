@@ -224,7 +224,7 @@ function NewPageContent() {
 
   if (error) {
     return (
-      <div className="px-8 py-10">
+      <div className="px-4 py-6 md:px-8 md:py-10">
         <div className="max-w-2xl mx-auto bg-red-50/80 border border-red-200/60 rounded-2xl p-6 shadow-sm">
           <p className="text-red-800 font-semibold text-base mb-2">エラーが発生しました</p>
           <p className="text-red-600 text-sm mb-4">{error}</p>
@@ -240,101 +240,131 @@ function NewPageContent() {
   }
 
   return (
-    <div className="px-8 py-10">
+    <div className="px-4 py-6 md:px-8 md:py-10">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <div>
-            <h1 className="text-3xl font-semibold text-gray-900 tracking-tight mb-1">新着投稿</h1>
+            <h1 className="text-2xl font-bold text-gray-900 tracking-tight mb-1">新着投稿</h1>
             <p className="text-sm text-gray-500">新規で収集した投稿一覧</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200/60 overflow-hidden mb-8">
-          <div className="overflow-x-auto">
-            <table className="w-full divide-y divide-gray-200/60">
-              <thead className="bg-gray-50/80">
-                <tr className="divide-x divide-gray-200/60">
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                    IG Code
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                    アカウント名
-                  </th>
-                  <th 
-                    className="px-4 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100/80 transition-colors"
-                    onClick={() => handleSort('likes_count')}
-                  >
-                    いいね数 {getSortIcon('likes_count')}
-                  </th>
-                  <th 
-                    className="px-4 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100/80 transition-colors"
-                    onClick={() => handleSort('video_view_count')}
-                  >
-                    再生数 {getSortIcon('video_view_count')}
-                  </th>
-                  <th 
-                    className="px-4 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100/80 transition-colors"
-                    onClick={() => handleSort('engagement_rate')}
-                  >
-                    エンゲージメント率 {getSortIcon('engagement_rate')}
-                  </th>
-                  <th 
-                    className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100/80 transition-colors"
-                    onClick={() => handleSort('posted_at')}
-                  >
-                    投稿日 {getSortIcon('posted_at')}
-                  </th>
-                  <th 
-                    className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100/80 transition-colors"
-                    onClick={() => handleSort('created_at')}
-                  >
-                    取得日時 {getSortIcon('created_at')}
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200/60">
-                {posts.map((item) => (
-                  <tr
-                    key={item.ig_code}
-                    onClick={() => handleRowClick(item.ig_code, item.owner_id)}
-                    className={`cursor-pointer transition-colors divide-x divide-gray-100/60 ${
-                      selectedReel === item.ig_code
-                        ? 'bg-blue-50/80 hover:bg-blue-100/80'
-                        : 'hover:bg-gray-50/80'
-                    }`}
-                  >
-                    <td className="px-4 py-3 whitespace-nowrap text-sm font-mono text-gray-900">
-                      {item.ig_code}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
-                      <div className="flex items-center gap-1">
-                        <span>{item.owner_username || item.owner_id || '—'}</span>
-                        {item.owner_id && (
-                          <svg className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                          </svg>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900 font-medium">
-                      {formatNumber(item.likes_count)}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900 font-medium">
-                      {formatNumber(item.video_view_count)}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-600">
-                      {formatEngagementRate(item.engagement_rate)}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                      {formatDate(item.posted_at)}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                      {formatRelativeTime(item.created_at)}
-                    </td>
+        <div className="mb-8">
+          {/* Desktop table */}
+          <div className="hidden md:block bg-white rounded-2xl shadow-sm border border-gray-200/60 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full divide-y divide-gray-200/60">
+                <thead className="bg-gray-50/80">
+                  <tr className="divide-x divide-gray-200/60">
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      IG Code
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      アカウント名
+                    </th>
+                    <th
+                      className="px-4 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100/80 transition-colors"
+                      onClick={() => handleSort('likes_count')}
+                    >
+                      いいね数 {getSortIcon('likes_count')}
+                    </th>
+                    <th
+                      className="px-4 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100/80 transition-colors"
+                      onClick={() => handleSort('video_view_count')}
+                    >
+                      再生数 {getSortIcon('video_view_count')}
+                    </th>
+                    <th
+                      className="px-4 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100/80 transition-colors"
+                      onClick={() => handleSort('engagement_rate')}
+                    >
+                      エンゲージメント率 {getSortIcon('engagement_rate')}
+                    </th>
+                    <th
+                      className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100/80 transition-colors"
+                      onClick={() => handleSort('posted_at')}
+                    >
+                      投稿日 {getSortIcon('posted_at')}
+                    </th>
+                    <th
+                      className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100/80 transition-colors"
+                      onClick={() => handleSort('created_at')}
+                    >
+                      取得日時 {getSortIcon('created_at')}
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200/60">
+                  {posts.map((item) => (
+                    <tr
+                      key={item.ig_code}
+                      onClick={() => handleRowClick(item.ig_code, item.owner_id)}
+                      className={`cursor-pointer transition-colors divide-x divide-gray-100/60 ${
+                        selectedReel === item.ig_code
+                          ? 'bg-blue-50/80 hover:bg-blue-100/80'
+                          : 'hover:bg-gray-50/80'
+                      }`}
+                    >
+                      <td className="px-4 py-3 whitespace-nowrap text-sm font-mono text-gray-900">
+                        {item.ig_code}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                        <div className="flex items-center gap-1">
+                          <span>{item.owner_username || item.owner_id || '—'}</span>
+                          {item.owner_id && (
+                            <svg className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900 font-medium">
+                        {formatNumber(item.likes_count)}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900 font-medium">
+                        {formatNumber(item.video_view_count)}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-600">
+                        {formatEngagementRate(item.engagement_rate)}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                        {formatDate(item.posted_at)}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                        {formatRelativeTime(item.created_at)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Mobile card list */}
+          <div className="md:hidden space-y-3">
+            {posts.map((item) => (
+              <div
+                key={item.ig_code}
+                onClick={() => handleRowClick(item.ig_code, item.owner_id)}
+                className={`bg-white rounded-xl border shadow-sm p-4 cursor-pointer transition-colors ${
+                  selectedReel === item.ig_code
+                    ? 'border-blue-300 bg-blue-50/50'
+                    : 'border-gray-200/60 active:bg-gray-50'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-gray-900 truncate">
+                    {item.owner_username || item.owner_id || '—'}
+                  </span>
+                  <span className="text-xs text-gray-500">{formatDate(item.posted_at)}</span>
+                </div>
+                <div className="flex items-center gap-4 text-xs text-gray-600">
+                  <span>いいね {formatNumber(item.likes_count)}</span>
+                  <span>再生 {formatNumber(item.video_view_count)}</span>
+                  <span>{formatEngagementRate(item.engagement_rate)}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -346,7 +376,7 @@ function NewPageContent() {
 
         {/* ページネーション */}
         {totalCount > 0 && (
-          <div className="mt-8 flex items-center justify-between">
+          <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-3">
             <div className="text-sm text-gray-600">
               {((currentPage - 1) * pageSize + 1)} - {Math.min(currentPage * pageSize, totalCount)} / {totalCount} 件
             </div>

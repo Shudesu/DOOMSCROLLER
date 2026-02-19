@@ -195,7 +195,7 @@ export default function RankingPage() {
 
   if (error) {
     return (
-      <div className="px-8 py-10">
+      <div className="px-4 py-6 md:px-8 md:py-10">
         <div className="max-w-2xl mx-auto bg-red-50/80 border border-red-200/60 rounded-2xl p-6 shadow-sm">
           <p className="text-red-800 font-semibold text-base mb-2">エラーが発生しました</p>
           <p className="text-red-600 text-sm mb-4">
@@ -209,19 +209,20 @@ export default function RankingPage() {
   const accountStats = getAccountStats();
 
   return (
-    <div className="px-8 py-10">
+    <div className="px-4 py-6 md:px-8 md:py-10">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <div>
-            <h1 className="text-3xl font-semibold text-gray-900 tracking-tight mb-1">トレンドランキング</h1>
+            <h1 className="text-2xl font-bold text-gray-900 tracking-tight mb-1">トレンドランキング</h1>
             <p className="text-sm text-gray-500">過去30日間でエンゲージメント率が高い投稿 (上位50件)</p>
           </div>
         </div>
 
-        <div className="flex gap-6 items-start">
-          {/* 左側: 投稿ランキング表 */}
-          <div className="flex-1 bg-white rounded-2xl shadow-sm border border-gray-200/60 overflow-hidden">
-            <div className="overflow-x-auto max-h-[700px] overflow-y-auto">
+        <div className="flex flex-col lg:flex-row gap-6 items-start">
+          {/* 投稿ランキング */}
+          <div className="flex-1 w-full bg-white rounded-2xl shadow-sm border border-gray-200/60 overflow-hidden">
+            {/* Desktop table */}
+            <div className="hidden md:block overflow-x-auto max-h-[700px] overflow-y-auto">
               <table className="w-full divide-y divide-gray-200/60 table-fixed">
                 <colgroup>
                   <col className="w-16" />
@@ -239,25 +240,25 @@ export default function RankingPage() {
                     <th className="px-2 py-2 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                       アカウント名
                     </th>
-                    <th 
+                    <th
                       className="px-2 py-2 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100/80 transition-colors"
                       onClick={() => handleSort('likes_count')}
                     >
                       いいね数 {getSortIcon('likes_count')}
                     </th>
-                    <th 
+                    <th
                       className="px-2 py-2 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100/80 transition-colors"
                       onClick={() => handleSort('video_view_count')}
                     >
                       再生数 {getSortIcon('video_view_count')}
                     </th>
-                    <th 
+                    <th
                       className="px-2 py-2 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100/80 transition-colors whitespace-nowrap"
                       onClick={() => handleSort('total_score')}
                     >
                       <div className="flex items-center justify-end gap-1 group relative whitespace-nowrap z-30">
                         <span>総合スコア</span>
-                        <div 
+                        <div
                           className="relative"
                           onMouseEnter={(e) => {
                             const tooltip = e.currentTarget.querySelector('.tooltip') as HTMLElement;
@@ -278,7 +279,7 @@ export default function RankingPage() {
                         {getSortIcon('total_score')}
                       </div>
                     </th>
-                    <th 
+                    <th
                       className="px-2 py-2 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100/80 transition-colors"
                       onClick={() => handleSort('posted_at')}
                     >
@@ -325,11 +326,41 @@ export default function RankingPage() {
                 </tbody>
               </table>
             </div>
+
+            {/* Mobile card list */}
+            <div className="md:hidden divide-y divide-gray-200/60 max-h-[600px] overflow-y-auto">
+              {getSortedRankings().map((item, index) => (
+                <div
+                  key={item.ig_code}
+                  onClick={() => handleRowClick(item.ig_code, item.owner_id)}
+                  className={`px-4 py-3 cursor-pointer transition-colors ${
+                    selectedReel === item.ig_code
+                      ? 'bg-blue-50/80'
+                      : 'active:bg-gray-50/80'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-gray-500 w-6">#{index + 1}</span>
+                      <span className="text-sm font-medium text-gray-900 truncate">
+                        {item.owner_username || item.owner_id || '—'}
+                      </span>
+                    </div>
+                    <span className="text-xs text-gray-500">{formatDate(item.posted_at)}</span>
+                  </div>
+                  <div className="flex items-center gap-4 ml-8 text-xs text-gray-600">
+                    <span>いいね {formatNumber(item.likes_count)}</span>
+                    <span>再生 {formatNumber(item.video_view_count)}</span>
+                    <span className="font-bold text-slate-700">スコア {formatScore(item.total_score)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* 右側: アカウントパワー表 */}
-          <div className="w-64 bg-white rounded-2xl shadow-sm border border-gray-200/60 overflow-hidden">
-            <div className="overflow-y-auto max-h-[700px]">
+          {/* アカウントパワー表 */}
+          <div className="w-full lg:w-64 bg-white rounded-2xl shadow-sm border border-gray-200/60 overflow-hidden">
+            <div className="overflow-y-auto max-h-[400px] lg:max-h-[700px]">
               <table className="w-full divide-y divide-gray-200/60 table-fixed">
                 <colgroup>
                   <col className="w-12" />
@@ -355,7 +386,7 @@ export default function RankingPage() {
                       <td className="px-2 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
                         {index + 1}
                       </td>
-                      <td 
+                      <td
                         className={`px-2 py-2 whitespace-nowrap text-sm text-gray-700 ${
                           account.ownerId ? 'cursor-pointer hover:text-slate-700' : ''
                         }`}

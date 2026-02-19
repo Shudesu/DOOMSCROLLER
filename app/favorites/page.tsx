@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import InlineSpinner from '@/components/InlineSpinner';
 import ReelDetailModal from '@/components/ReelDetailModal';
 import { useToast } from '@/components/ToastProvider';
 
@@ -195,7 +196,7 @@ export default function FavoritesPage() {
 
   if (error) {
     return (
-      <div className="px-8 py-10">
+      <div className="px-4 py-6 md:px-8 md:py-10">
         <div className="max-w-7xl mx-auto">
           <div className="bg-red-50/80 border border-red-200/60 rounded-2xl p-6 shadow-sm">
             <p className="text-red-800 font-semibold text-base mb-2">エラーが発生しました</p>
@@ -209,19 +210,16 @@ export default function FavoritesPage() {
   }
 
   return (
-    <div className="px-8 py-10">
+    <div className="px-4 py-6 md:px-8 md:py-10">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-gray-900">お気に入り</h1>
+              <h1 className="text-2xl font-bold text-gray-900 tracking-tight">お気に入り</h1>
               {isFetching && !loading && (
                 <div className="flex items-center gap-2 text-sm text-gray-500">
-                  <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
+                  <InlineSpinner size="sm" />
                   <span>更新中...</span>
                 </div>
               )}
@@ -234,10 +232,7 @@ export default function FavoritesPage() {
               >
                 {loadingSimilar ? (
                   <>
-                    <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
+                    <InlineSpinner size="sm" />
                     <span>検索中...</span>
                   </>
                 ) : (
@@ -388,7 +383,9 @@ export default function FavoritesPage() {
             <p className="text-gray-500 text-sm">投稿詳細からお気に入りに追加できます</p>
           </div>
         ) : (
-          <div className="bg-white rounded-xl border border-gray-200/60 shadow-sm overflow-hidden">
+          <>
+          {/* Desktop table */}
+          <div className="hidden md:block bg-white rounded-xl border border-gray-200/60 shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200/60">
                 <thead className="bg-gray-50/80">
@@ -475,6 +472,43 @@ export default function FavoritesPage() {
               </table>
             </div>
           </div>
+
+          {/* Mobile card list */}
+          <div className="md:hidden space-y-3">
+            {favorites.map((item) => (
+              <div
+                key={item.ig_code}
+                onClick={() => handleReelClick(item.ig_code, item.owner_id)}
+                className={`bg-white rounded-xl border shadow-sm p-4 cursor-pointer transition-colors ${
+                  lastSelectedReel === item.ig_code
+                    ? 'border-blue-300 bg-blue-50/50'
+                    : 'border-gray-200/60 active:bg-gray-50'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-gray-900 truncate">
+                    {item.owner_username ? `@${item.owner_username}` : (item.owner_id || '—')}
+                  </span>
+                  <button
+                    onClick={(e) => handleRemoveFavorite(e, item.ig_code)}
+                    disabled={removeFavoriteMutation.isPending}
+                    className="text-red-500 hover:text-red-700 transition-colors disabled:opacity-50 p-1"
+                    title="お気に入りから削除"
+                  >
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                  </button>
+                </div>
+                <div className="flex items-center gap-4 text-xs text-gray-600">
+                  <span>いいね {formatNumber(item.likes_count)}</span>
+                  <span>再生 {formatNumber(item.video_view_count)}</span>
+                  <span>{formatDate(item.posted_at)}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          </>
         )}
 
         {/* Reel Detail Modal */}

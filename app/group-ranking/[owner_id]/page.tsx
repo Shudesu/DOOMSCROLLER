@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import InlineSpinner from '@/components/InlineSpinner';
 import ReelDetailModal from '@/components/ReelDetailModal';
 
 interface OwnerSuggestion {
@@ -243,7 +244,7 @@ export default function GroupRankingPage() {
   };
 
   return (
-    <div className="px-8 py-10">
+    <div className="px-4 py-6 md:px-8 md:py-10">
       <div className="max-w-7xl mx-auto">
         <button
           onClick={() => router.push('/owners')}
@@ -253,7 +254,7 @@ export default function GroupRankingPage() {
         </button>
 
         <div className="mb-8">
-          <h1 className="text-3xl font-semibold text-gray-900 tracking-tight mb-1">グループランキング</h1>
+          <h1 className="text-2xl font-bold text-gray-900 tracking-tight mb-1">グループランキング</h1>
           <p className="text-sm text-gray-500">似ているアカウント群の投稿をランキング表示</p>
         </div>
 
@@ -298,9 +299,7 @@ export default function GroupRankingPage() {
               )}
               {loadingSuggestions && (
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <svg className="w-5 h-5 animate-spin text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-3.357-5.357M20 15v5h-5" />
-                  </svg>
+                  <InlineSpinner />
                 </div>
               )}
             </div>

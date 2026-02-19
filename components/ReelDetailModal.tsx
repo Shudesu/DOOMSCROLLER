@@ -208,6 +208,18 @@ export default function ReelDetailModal({
     },
   });
 
+  // Escapeキーでモーダルを閉じる
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   useEffect(() => {
     if (isOpen) {
       // モーダルを開くときにviewModeをリセット
@@ -224,7 +236,7 @@ export default function ReelDetailModal({
       // モーダルを閉じるときに背景のスクロールを有効化
       document.body.style.overflow = '';
     }
-    
+
     // クリーンアップ関数：コンポーネントがアンマウントされた時にもスクロールを復元
     return () => {
       document.body.style.overflow = '';
@@ -331,17 +343,20 @@ export default function ReelDetailModal({
   };
 
   return (
-    <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-8"
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-0 md:p-8"
       onClick={handleBackdropClick}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="reel-detail-title"
     >
-      <div 
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col"
+      <div
+        className="bg-white shadow-2xl w-full h-full md:h-auto md:max-w-6xl md:max-h-[90vh] md:rounded-2xl overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-gray-200/60">
-          <div className="flex items-center gap-4">
+        <div className="flex items-center justify-between px-4 py-4 md:px-6 md:py-5 border-b border-gray-200/60 gap-2">
+          <div className="flex items-center gap-3 md:gap-4 min-w-0 flex-1">
             {viewMode === 'compare' ? (
               <button
                 onClick={handleBackToList}
@@ -354,29 +369,38 @@ export default function ReelDetailModal({
               </button>
             ) : (
               <>
-                <h2 className="text-xl font-semibold text-gray-900 tracking-tight">投稿詳細</h2>
+                <h2 id="reel-detail-title" className="text-xl font-semibold text-gray-900 tracking-tight">投稿詳細</h2>
                 {reelWithFavorite && (
-                  <div className="flex items-center gap-3 text-sm text-gray-600">
-                    <span className="font-mono">{reelWithFavorite.ig_code}</span>
-                    {reelWithFavorite.owner_username && (
-                      <>
-                        <span className="text-gray-400">|</span>
+                  <>
+                    <div className="hidden md:flex items-center gap-3 text-sm text-gray-600">
+                      <span className="font-mono">{reelWithFavorite.ig_code}</span>
+                      {reelWithFavorite.owner_username && (
+                        <>
+                          <span className="text-gray-400">|</span>
+                          <span className="font-medium">@{reelWithFavorite.owner_username}</span>
+                        </>
+                      )}
+                      {reelWithFavorite.owner_id && !reelWithFavorite.owner_username && (
+                        <>
+                          <span className="text-gray-400">|</span>
+                          <span>{reelWithFavorite.owner_id}</span>
+                        </>
+                      )}
+                      {reelWithFavorite.posted_at && (
+                        <>
+                          <span className="text-gray-400">|</span>
+                          <span>{formatDate(reelWithFavorite.posted_at)}</span>
+                        </>
+                      )}
+                    </div>
+                    <div className="flex md:hidden items-center gap-2 text-xs text-gray-500 truncate">
+                      {reelWithFavorite.owner_username ? (
                         <span className="font-medium">@{reelWithFavorite.owner_username}</span>
-                      </>
-                    )}
-                    {reelWithFavorite.owner_id && !reelWithFavorite.owner_username && (
-                      <>
-                        <span className="text-gray-400">|</span>
-                        <span>{reelWithFavorite.owner_id}</span>
-                      </>
-                    )}
-                    {reelWithFavorite.posted_at && (
-                      <>
-                        <span className="text-gray-400">|</span>
-                        <span>{formatDate(reelWithFavorite.posted_at)}</span>
-                      </>
-                    )}
-                  </div>
+                      ) : (
+                        <span className="font-mono truncate">{reelWithFavorite.ig_code}</span>
+                      )}
+                    </div>
+                  </>
                 )}
               </>
             )}
@@ -418,6 +442,7 @@ export default function ReelDetailModal({
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-gray-600 text-2xl transition-colors w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100"
+              aria-label="閉じる"
             >
               ×
             </button>
@@ -425,7 +450,7 @@ export default function ReelDetailModal({
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-hidden flex">
+        <div className="flex-1 overflow-hidden flex flex-col md:flex-row">
           {loading ? (
             <div className="flex-1 flex items-center justify-center">
               <LoadingSpinner />
@@ -435,7 +460,7 @@ export default function ReelDetailModal({
               /* Compare View: 2カラム表示 */
               <>
                 {/* Left: Original Reel */}
-                <div className="flex-1 overflow-y-auto p-6 border-r border-gray-200/60">
+                <div className="flex-1 overflow-y-auto p-4 md:p-6 border-b md:border-b-0 md:border-r border-gray-200/60">
                   <div className="mb-4">
                     <div className="flex items-center justify-between mb-1">
                       <div className="text-xs text-gray-500">元の投稿</div>
@@ -510,7 +535,7 @@ export default function ReelDetailModal({
                   )}
 
                   {/* Engagement Info - Compact Unified Design */}
-                  <div className="mb-6 grid grid-cols-4 gap-2">
+                  <div className="mb-6 grid grid-cols-2 md:grid-cols-4 gap-2">
                     <div className="bg-white rounded-lg p-3 border border-gray-200/60 shadow-sm">
                       <div className="text-[10px] text-gray-500 font-medium mb-1">いいね数</div>
                       <div className="text-base font-bold text-gray-900">
@@ -605,7 +630,7 @@ export default function ReelDetailModal({
                 </div>
 
                 {/* Right: Similar Reel */}
-                <div className="flex-1 overflow-y-auto p-6">
+                <div className="flex-1 overflow-y-auto p-4 md:p-6">
                   <div className="mb-4">
                     <div className="flex items-center justify-between mb-1">
                       <div className="text-xs text-gray-500">比較対象の投稿</div>
@@ -692,7 +717,7 @@ export default function ReelDetailModal({
                       })()}
 
                       {/* Engagement Info - Compact Unified Design */}
-                      <div className="mb-6 grid grid-cols-4 gap-2">
+                      <div className="mb-6 grid grid-cols-2 md:grid-cols-4 gap-2">
                         <div className="bg-white rounded-lg p-3 border border-gray-200/60 shadow-sm">
                           <div className="text-[10px] text-gray-500 font-medium mb-1">いいね数</div>
                           <div className="text-base font-bold text-gray-900">
@@ -796,9 +821,9 @@ export default function ReelDetailModal({
               /* List View: 通常の表示 */
               <>
               {/* Left side: Transcript */}
-              <div className="flex-1 overflow-y-auto p-6 border-r border-gray-200/60">
+              <div className="flex-1 overflow-y-auto p-4 md:p-6 md:border-r border-gray-200/60 order-2 md:order-1">
                 {/* Engagement Info - Unified Compact Design */}
-                <div className="mb-6 grid grid-cols-4 gap-2">
+                <div className="mb-6 grid grid-cols-2 md:grid-cols-4 gap-2">
                   <div className="bg-white rounded-lg p-3 border border-gray-200/60 shadow-sm">
                     <div className="text-[10px] text-gray-500 font-medium mb-1">いいね数</div>
                     <div className="text-base font-bold text-gray-900">
@@ -956,11 +981,11 @@ export default function ReelDetailModal({
 
               </div>
 
-              {/* Right side: Video Player (only in list view) */}
+              {/* Video Player (only in list view) */}
               {viewMode === 'list' && (
-                <div className="w-96 flex-shrink-0 bg-gray-100/80 flex items-center justify-center p-6">
+                <div className="w-full md:w-96 flex-shrink-0 bg-gray-100/80 flex items-center justify-center p-4 md:p-6 order-1 md:order-2">
                   {embedUrl ? (
-                    <div className="w-full h-[600px] bg-black rounded-xl overflow-hidden shadow-lg">
+                    <div className="w-full h-[300px] md:h-[600px] bg-black rounded-xl overflow-hidden shadow-lg">
                       <iframe
                         src={embedUrl}
                         className="w-full h-full border-0"

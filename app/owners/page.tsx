@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import InlineSpinner from '@/components/InlineSpinner';
 
 interface OwnerSuggestion {
   owner_id: string;
@@ -47,6 +48,10 @@ function OwnersPageContent() {
     const page = searchParams.get('page');
     return page ? Math.max(1, parseInt(page, 10)) : 1;
   };
+  
+  const getInitialSearchQuery = (): string => {
+    return searchParams.get('search') || '';
+  };
 
   const [owners, setOwners] = useState<Owner[]>([]);
   const [loading, setLoading] = useState(true);
@@ -55,7 +60,9 @@ function OwnersPageContent() {
   const [sortOrder, setSortOrder] = useState<SortOrder>(getInitialSortOrder());
   const [currentPage, setCurrentPage] = useState(getInitialPage());
   const [totalCount, setTotalCount] = useState(0);
-  const [searchQuery, setSearchQuery] = useState('');
+  const initialSearch = getInitialSearchQuery();
+  const [searchQuery, setSearchQuery] = useState(initialSearch); // 入力用（予測変換候補の表示に使用）
+  const [selectedSearchQuery, setSelectedSearchQuery] = useState(initialSearch); // 実際の検索に使用
   const [suggestions, setSuggestions] = useState<OwnerSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
@@ -113,7 +120,7 @@ function OwnersPageContent() {
       const offset = (currentPage - 1) * pageSize;
       
       // 検索クエリからowner_idを抽出（@username (owner_id) 形式から）
-      const searchTerm = searchQuery.trim().length >= 2 ? extractOwnerId(searchQuery.trim()) : '';
+      const searchTerm = selectedSearchQuery.trim().length >= 2 ? extractOwnerId(selectedSearchQuery.trim()) : '';
       
       // APIに送信するソートフィールド（totalの場合はtotal_postsに変換）
       const apiSortField = sortField === 'total' ? 'total_posts' : sortField;
@@ -152,13 +159,14 @@ function OwnersPageContent() {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, searchQuery, sortField, sortOrder, pageSize]);
+  }, [currentPage, selectedSearchQuery, sortField, sortOrder, pageSize]);
 
   // URLパラメータの変更を監視（ブラウザの戻る/進むボタン対応）
   useEffect(() => {
     const sort = searchParams.get('sort');
     const order = searchParams.get('order');
     const page = searchParams.get('page');
+    const search = searchParams.get('search') || '';
     
     const validFields: SortField[] = ['avg_likes', 'max_likes', 'avg_comments', 'avg_views', 'total'];
     const urlSort = sort && validFields.includes(sort as SortField) ? (sort as SortField) : 'avg_likes';
@@ -173,6 +181,10 @@ function OwnersPageContent() {
     }
     if (urlPage !== currentPage) {
       setCurrentPage(urlPage);
+    }
+    if (search !== selectedSearchQuery) {
+      setSelectedSearchQuery(search);
+      setSearchQuery(search);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
@@ -250,9 +262,10 @@ function OwnersPageContent() {
 
   const handleSuggestionClick = (suggestion: OwnerSuggestion) => {
     setSearchQuery(suggestion.display);
+    setSelectedSearchQuery(suggestion.display); // 実際の検索を実行
     setShowSuggestions(false);
     setCurrentPage(1);
-    updateURLParams({ page: 1 });
+    updateURLParams({ page: 1, search: suggestion.display });
   };
 
   if (loading) {
@@ -261,7 +274,7 @@ function OwnersPageContent() {
 
   if (error) {
     return (
-      <div className="px-8 py-10">
+      <div className="px-4 py-6 md:px-8 md:py-10">
         <div className="max-w-2xl mx-auto bg-red-50/80 border border-red-200/60 rounded-2xl p-6 shadow-sm">
           <p className="text-red-800 font-semibold text-base mb-2">エラーが発生しました</p>
           <p className="text-red-600 text-sm mb-4">{error}</p>
@@ -342,16 +355,16 @@ function OwnersPageContent() {
 
 
   return (
-    <div className="px-8 py-10">
+    <div className="px-4 py-6 md:px-8 md:py-10">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-semibold text-gray-900 tracking-tight mb-1">アカウント一覧</h1>
+          <h1 className="text-2xl font-bold text-gray-900 tracking-tight mb-1">アカウント一覧</h1>
           <p className="text-sm text-gray-500">管理されているアカウントの一覧と統計情報</p>
         </div>
 
         {/* 検索とソートコントロール */}
-        <div className="mb-6 flex items-center gap-4 flex-wrap">
-          <div className="flex-1 min-w-[300px] relative">
+        <div className="mb-6 flex flex-col md:flex-row items-stretch md:items-center gap-3 md:gap-4">
+          <div className="flex-1 relative">
             <input
               ref={inputRef}
               type="text"
@@ -359,8 +372,23 @@ function OwnersPageContent() {
               onChange={(e) => {
                 setSearchQuery(e.target.value);
                 setShowSuggestions(true);
-                setCurrentPage(1);
-                updateURLParams({ page: 1 });
+                // 検索は実行しない（候補選択時のみ実行）
+              }}
+              onKeyDown={(e) => {
+                // Enterキーで検索を実行
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  if (searchQuery.trim().length >= 2) {
+                    setSelectedSearchQuery(searchQuery);
+                    setShowSuggestions(false);
+                    setCurrentPage(1);
+                    updateURLParams({ page: 1, search: searchQuery });
+                  }
+                }
+                // Escapeキーで候補を閉じる
+                if (e.key === 'Escape') {
+                  setShowSuggestions(false);
+                }
               }}
               onFocus={() => {
                 if (suggestions.length > 0) {
@@ -391,9 +419,7 @@ function OwnersPageContent() {
             )}
             {loadingSuggestions && (
               <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                <svg className="w-5 h-5 animate-spin text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-3.357-5.357M20 15v5h-5" />
-                </svg>
+                <InlineSpinner />
               </div>
             )}
           </div>
@@ -427,8 +453,8 @@ function OwnersPageContent() {
           </div>
         </div>
 
-        {/* テーブル表示 */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200/60 overflow-hidden">
+        {/* Desktop table */}
+        <div className="hidden md:block bg-white rounded-2xl shadow-sm border border-gray-200/60 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full divide-y divide-gray-200/60">
               <thead className="bg-gray-50/80">
@@ -505,6 +531,49 @@ function OwnersPageContent() {
           </div>
         </div>
 
+        {/* Mobile card list */}
+        <div className="md:hidden space-y-3">
+          {owners.map((owner) => {
+            const isHighlighted = highlightOwnerId === owner.owner_id;
+            return (
+              <div
+                key={owner.owner_id}
+                ref={isHighlighted ? highlightedRowRef : null}
+                onClick={() => router.push(`/owners/${owner.owner_id}`)}
+                className={`bg-white rounded-xl border shadow-sm p-4 cursor-pointer active:bg-gray-50 transition-colors ${
+                  isHighlighted ? 'border-yellow-400 bg-yellow-50/80' : 'border-gray-200/60'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {owner.owner_username ? `@${owner.owner_username}` : owner.owner_id}
+                    </div>
+                    {owner.owner_username && (
+                      <div className="text-xs text-gray-500 font-mono">{owner.owner_id}</div>
+                    )}
+                  </div>
+                  <span className="text-xs text-gray-500">{formatRelativeTime(owner.last_updated_at)}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-xs">
+                  <div>
+                    <span className="text-gray-500">投稿数</span>
+                    <div className="font-medium text-gray-900">{owner.total}</div>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">平均いいね</span>
+                    <div className="font-medium text-gray-900">{formatNumber(owner.avg_likes)}</div>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">平均再生</span>
+                    <div className="font-medium text-gray-900">{formatNumber(owner.avg_views)}</div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
         {owners.length === 0 && !loading && (
           <div className="text-center py-16">
             <p className="text-gray-500 text-base">アカウントが見つかりませんでした</p>
@@ -513,7 +582,7 @@ function OwnersPageContent() {
 
         {/* ページネーション */}
         {totalCount > 0 && (
-          <div className="mt-8 flex items-center justify-between">
+          <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-3">
             <div className="text-sm text-gray-600">
               {((currentPage - 1) * pageSize + 1)} - {Math.min(currentPage * pageSize, totalCount)} / {totalCount} 件
             </div>

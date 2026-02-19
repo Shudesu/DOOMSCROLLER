@@ -286,16 +286,16 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="px-8 py-10">
+    <div className="px-4 py-6 md:px-8 md:py-10">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-semibold text-gray-900 tracking-tight mb-1">検索</h1>
+          <h1 className="text-2xl font-bold text-gray-900 tracking-tight mb-1">検索</h1>
           <p className="text-sm text-gray-500">IG Code、Owner ID、またはセマンティック検索</p>
         </div>
 
         <div className="mb-8">
           <div className="flex gap-3 mb-3">
-            <div className="flex gap-2 bg-gray-100/80 p-1 rounded-xl">
+            <div className="flex gap-1 md:gap-2 bg-gray-100/80 p-1 rounded-xl overflow-x-auto">
               <button
                 type="button"
                 onClick={() => {
@@ -352,7 +352,7 @@ export default function SearchPage() {
               </button>
             </div>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-col md:flex-row gap-3">
             <input
               type="text"
               value={searchQuery}
@@ -364,13 +364,13 @@ export default function SearchPage() {
                 }
               }}
               placeholder={
-                searchType === 'ig_code' 
-                  ? 'IG Codeを入力してください' 
+                searchType === 'ig_code'
+                  ? 'IG Codeを入力してください'
                   : searchType === 'owner_id'
                   ? 'Owner IDを入力してください'
-                  : '日本語で検索クエリを入力してください（例: 成功の秘訣、面白い言い回し）'
+                  : '日本語で検索（例: 成功の秘訣）'
               }
-              className="flex-1 px-5 py-3 border border-gray-300/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-400 transition-all shadow-sm text-base"
+              className="flex-1 px-4 py-3 md:px-5 border border-gray-300/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-400 transition-all shadow-sm text-base"
               disabled={loading && searchType !== 'semantic'}
             />
             <button
@@ -408,7 +408,8 @@ export default function SearchPage() {
                 <p className="text-sm text-gray-500 mt-1">Owner ID: {selectedOwnerId}</p>
               )}
             </div>
-            <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
+            {/* Desktop table */}
+            <div className="hidden md:block overflow-x-auto max-h-[600px] overflow-y-auto">
               <table className="w-full divide-y divide-gray-200/60">
                 <thead className="bg-gray-50/80 sticky top-0">
                   <tr>
@@ -427,22 +428,34 @@ export default function SearchPage() {
                       className="hover:bg-gray-50/80 cursor-pointer transition-colors"
                     >
                       <td className="px-4 py-3 whitespace-nowrap text-sm font-mono text-gray-900">{item.ig_code}</td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900 font-medium">
-                        {formatNumber(item.likes_count)}
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900 font-medium">
-                        {formatNumber(item.comments_count)}
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900 font-medium">
-                        {formatNumber(item.video_view_count)}
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                        {formatDate(item.posted_at)}
-                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900 font-medium">{formatNumber(item.likes_count)}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900 font-medium">{formatNumber(item.comments_count)}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900 font-medium">{formatNumber(item.video_view_count)}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">{formatDate(item.posted_at)}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+            </div>
+            {/* Mobile cards */}
+            <div className="md:hidden divide-y divide-gray-200/60">
+              {reels.map((item) => (
+                <div
+                  key={item.ig_code}
+                  onClick={() => handleReelClick(item.ig_code, selectedOwnerId)}
+                  className="p-4 active:bg-gray-50 cursor-pointer transition-colors"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-mono text-xs text-gray-600">{item.ig_code}</span>
+                    <span className="text-xs text-gray-500">{formatDate(item.posted_at)}</span>
+                  </div>
+                  <div className="flex items-center gap-4 text-xs">
+                    <span><span className="text-gray-500">いいね</span> <span className="font-bold text-gray-900">{formatNumber(item.likes_count)}</span></span>
+                    <span><span className="text-gray-500">コメント</span> <span className="font-bold text-gray-900">{formatNumber(item.comments_count)}</span></span>
+                    <span><span className="text-gray-500">再生</span> <span className="font-bold text-gray-900">{formatNumber(item.video_view_count)}</span></span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}
@@ -450,7 +463,7 @@ export default function SearchPage() {
         {semanticResults && !loading && (
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200/60 overflow-hidden">
             <div className="p-6 border-b border-gray-200/60">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
                 <h2 className="text-xl font-semibold text-gray-900 tracking-tight">
                   検索結果 ({semanticResults.results.length}件)
                 </h2>
@@ -487,7 +500,7 @@ export default function SearchPage() {
                   </select>
                 </div>
               </div>
-              <div className="flex gap-4 text-sm">
+              <div className="flex flex-col md:flex-row gap-2 md:gap-4 text-sm">
                 <div>
                   <span className="text-gray-600">クエリ:</span>
                   <span className="ml-2 font-medium text-gray-900">{semanticResults.query_raw}</span>
@@ -503,7 +516,8 @@ export default function SearchPage() {
                 </div>
               </div>
             </div>
-            <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
+            {/* Desktop table */}
+            <div className="hidden md:block overflow-x-auto max-h-[600px] overflow-y-auto">
               <table className="w-full divide-y divide-gray-200/60">
                 <thead className="bg-gray-50/80 sticky top-0">
                   <tr>
@@ -529,25 +543,38 @@ export default function SearchPage() {
                       <td className="px-4 py-3 text-sm text-gray-900 max-w-md">
                         <div className="line-clamp-2">{item.text}</div>
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900 font-medium">
-                        {formatNumber(item.likes_count)}
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900 font-medium">
-                        {formatNumber(item.comments_count)}
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900 font-medium">
-                        {formatNumber(item.video_view_count)}
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                        {formatDate(item.posted_at)}
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-600">
-                        {item.score.toFixed(4)}
-                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900 font-medium">{formatNumber(item.likes_count)}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900 font-medium">{formatNumber(item.comments_count)}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900 font-medium">{formatNumber(item.video_view_count)}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">{formatDate(item.posted_at)}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-600">{item.score.toFixed(4)}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+            </div>
+            {/* Mobile cards */}
+            <div className="md:hidden divide-y divide-gray-200/60">
+              {semanticResults.results.map((item, index) => (
+                <div
+                  key={`${item.ig_code}-${index}`}
+                  onClick={() => handleSemanticResultClick(item.ig_code, item.owner_id)}
+                  className="p-4 active:bg-gray-50 cursor-pointer transition-colors"
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm font-medium text-gray-900">
+                      {item.owner_username ? `@${item.owner_username}` : (item.owner_id || '—')}
+                    </span>
+                    <span className="text-xs px-2 py-0.5 bg-slate-100 text-slate-700 rounded">{item.score.toFixed(4)}</span>
+                  </div>
+                  <p className="text-xs text-gray-700 line-clamp-2 mb-2">{item.text}</p>
+                  <div className="flex items-center gap-4 text-xs">
+                    <span><span className="text-gray-500">いいね</span> <span className="font-bold">{formatNumber(item.likes_count)}</span></span>
+                    <span><span className="text-gray-500">再生</span> <span className="font-bold">{formatNumber(item.video_view_count)}</span></span>
+                    <span className="text-gray-500">{formatDate(item.posted_at)}</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}
