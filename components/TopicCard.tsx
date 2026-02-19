@@ -14,43 +14,61 @@ export interface ClassifiedPost {
 
 interface PostCardProps {
   post: ClassifiedPost;
-  onReelClick: (igCode: string) => void;
+  rank: number;
+  onClick: () => void;
 }
 
-function formatNumber(num: number): string {
-  if (num >= 100_000_000) return `${(num / 100_000_000).toFixed(1)}億`;
-  if (num >= 10_000) return `${(num / 10_000).toFixed(1)}万`;
-  if (num >= 1_000) return `${(num / 1_000).toFixed(1)}千`;
-  return num.toLocaleString();
+function fmt(n: number): string {
+  if (n >= 100_000_000) return `${(n / 100_000_000).toFixed(1)}億`;
+  if (n >= 10_000) return `${(n / 10_000).toFixed(1)}万`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}千`;
+  return n.toLocaleString();
 }
 
-export default function PostCard({ post, onReelClick }: PostCardProps) {
+export default function PostCard({ post, rank, onClick }: PostCardProps) {
   return (
     <button
-      onClick={() => onReelClick(post.ig_code)}
-      className="w-full text-left bg-white rounded-2xl border border-gray-200/60 shadow-sm p-4 hover:shadow-md hover:border-gray-300/60 transition-all"
+      onClick={onClick}
+      className="w-full text-left px-4 py-3 hover:bg-gray-50/80 transition-colors group"
     >
-      {/* Header: username + metrics */}
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-xs font-semibold text-gray-700">
-          @{post.owner_username || post.ig_code.slice(0, 8)}
+      <div className="flex items-start gap-3">
+        {/* Rank */}
+        <span className="text-xs font-medium text-gray-400 mt-0.5 w-5 shrink-0 text-right">
+          {rank}
         </span>
-        <div className="flex items-center gap-2.5 text-[10px] text-gray-400">
-          <span>♡ {formatNumber(post.likes_count)}</span>
-          <span>▶ {formatNumber(post.video_view_count)}</span>
-          <span>ER {post.engagement_rate.toFixed(1)}%</span>
+
+        <div className="flex-1 min-w-0">
+          {/* Summary */}
+          <p className="text-sm text-gray-900 leading-snug mb-1">
+            {post.summary}
+          </p>
+
+          {/* Meta */}
+          <div className="flex items-center gap-3 text-xs text-gray-400">
+            <span className="font-medium text-gray-500">
+              @{post.owner_username || '—'}
+            </span>
+            <span>{fmt(post.video_view_count)} 再生</span>
+            <span>{fmt(post.likes_count)} いいね</span>
+            <span>ER {post.engagement_rate.toFixed(1)}%</span>
+          </div>
         </div>
+
+        {/* Arrow */}
+        <svg
+          className="w-4 h-4 text-gray-300 group-hover:text-gray-500 transition-colors mt-1 shrink-0"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
       </div>
-
-      {/* Summary */}
-      <p className="text-sm text-gray-900 leading-relaxed mb-2">
-        {post.summary}
-      </p>
-
-      {/* Transcript preview */}
-      <p className="text-xs text-gray-400 leading-relaxed line-clamp-2">
-        {post.transcript_ja}
-      </p>
     </button>
   );
 }

@@ -7,6 +7,24 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const EXCLUDED_ACCOUNTS = ['weratedogs'];
 
+const GENRES = [
+  'knowledge',
+  'business',
+  'mindset',
+  'lifestyle',
+  'entertainment',
+] as const;
+
+type Genre = (typeof GENRES)[number];
+
+const GENRE_LABELS: Record<Genre, string> = {
+  knowledge: '知識・雑学',
+  business: 'ビジネス・副業',
+  mindset: 'マインド・自己啓発',
+  lifestyle: 'ライフスタイル',
+  entertainment: 'エンタメ・ストーリー',
+};
+
 interface RankingRow {
   ig_code: string;
   owner_id: string | null;
@@ -19,7 +37,7 @@ interface RankingRow {
   transcript_ja: string;
 }
 
-interface ClassifiedPost {
+export interface ClassifiedPost {
   ig_code: string;
   owner_username: string | null;
   likes_count: number;
@@ -31,8 +49,8 @@ interface ClassifiedPost {
   transcript_ja: string;
 }
 
-interface HARMCategory {
-  category: 'health' | 'ambition' | 'relationship' | 'money';
+export interface GenreGroup {
+  genre: Genre;
   label: string;
   posts: ClassifiedPost[];
 }
@@ -57,42 +75,29 @@ async function generateRecommendations() {
   const result = await query<RankingRow>(sql, EXCLUDED_ACCOUNTS);
 
   const postsForLLM = result.rows.map((row, i) => ({
-    index: i + 1,
-    ig_code: row.ig_code,
-    owner: row.owner_username,
-    script: row.transcript_ja.slice(0, 400),
+    i: i + 1,
+    c: row.ig_code,
+    s: row.transcript_ja.slice(0, 300),
   }));
 
   const completion = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
-    temperature: 0.3,
+    temperature: 0.2,
     response_format: { type: 'json_object' },
     messages: [
       {
         role: 'system',
-        content: `Instagram Reelsの台本データを分析し、各投稿をHARMジャンルに分類し、台本の要約を付けてください。
+        content: `台本を読み、ジャンル分類と1行要約をJSON出力。
 
-## HARMの法則
-- health: 健康・美容・フィットネス・メンタルヘルス・ダイエット
-- ambition: 夢・キャリア・自己成長・スキルアップ・テクノロジー・教育
-- relationship: 人間関係・恋愛・コミュニケーション・人生の教訓・心理学
-- money: お金・投資・副業・ビジネス・節約・マーケティング
+ジャンル:
+- knowledge: 知識・雑学・科学・歴史・語学・教育・トリビア
+- business: ビジネス・副業・マーケ・投資・お金・テック・AI
+- mindset: マインド・自己啓発・成功哲学・習慣・モチベーション
+- lifestyle: 健康・美容・フィットネス・料理・旅行・日常
+- entertainment: エンタメ・ストーリー・コメディ・人間関係・恋愛・心理
 
-以下のJSON形式で返してください:
-{
-  "posts": [
-    {
-      "ig_code": "元のig_code",
-      "category": "health | ambition | relationship | money",
-      "summary": "台本の内容を1〜2文で要約（何について話しているか、どんな主張か）"
-    }
-  ]
-}
-
-ルール:
-- 全投稿を分類する（スキップしない）
-- summaryは台本の実際の内容に基づく（捏造しない）
-- どのカテゴリにも当てはまらない場合はambitionに入れる`,
+出力: {"r":[{"c":"ig_code","g":"genre","s":"台本の内容を30文字以内で要約"}]}
+全件分類。迷ったらentertainment。`,
       },
       {
         role: 'user',
@@ -102,31 +107,22 @@ async function generateRecommendations() {
   });
 
   const content = completion.choices[0]?.message?.content;
-  if (!content) {
-    throw new Error('LLM returned empty response');
-  }
+  if (!content) throw new Error('LLM returned empty response');
 
   const parsed = JSON.parse(content) as {
-    posts: { ig_code: string; category: string; summary: string }[];
+    r: { c: string; g: string; s: string }[];
   };
 
-  // Build a lookup map from LLM results
-  const llmMap = new Map(parsed.posts.map((p) => [p.ig_code, p]));
+  const llmMap = new Map(parsed.r.map((p) => [p.c, p]));
 
-  // Group posts by HARM category
-  const categoryMap: Record<string, ClassifiedPost[]> = {
-    health: [],
-    ambition: [],
-    relationship: [],
-    money: [],
-  };
+  const genreMap: Record<string, ClassifiedPost[]> = {};
+  for (const g of GENRES) genreMap[g] = [];
 
   for (const row of result.rows) {
-    const llmResult = llmMap.get(row.ig_code);
-    const category = llmResult?.category || 'ambition';
-    const validCategory = categoryMap[category] ? category : 'ambition';
+    const llm = llmMap.get(row.ig_code);
+    const genre = llm?.g && genreMap[llm.g] ? llm.g : 'entertainment';
 
-    categoryMap[validCategory].push({
+    genreMap[genre].push({
       ig_code: row.ig_code,
       owner_username: row.owner_username,
       likes_count: row.likes_count,
@@ -134,45 +130,32 @@ async function generateRecommendations() {
       engagement_rate: parseFloat(row.engagement_rate),
       total_score: parseFloat(row.total_score),
       posted_at: row.posted_at.toISOString(),
-      summary: llmResult?.summary || '',
-      transcript_ja: row.transcript_ja.slice(0, 200),
+      summary: llm?.s || '',
+      transcript_ja: row.transcript_ja.slice(0, 150),
     });
   }
 
-  const LABELS: Record<string, string> = {
-    health: '健康・美容',
-    ambition: '野心・成長',
-    relationship: '人間関係',
-    money: 'お金・ビジネス',
-  };
-
-  const categories: HARMCategory[] = ['health', 'ambition', 'relationship', 'money']
-    .map((key) => ({
-      category: key as HARMCategory['category'],
-      label: LABELS[key],
-      posts: categoryMap[key].slice(0, 8), // max 8 per category
-    }))
-    .filter((cat) => cat.posts.length > 0);
+  const genres: GenreGroup[] = GENRES.map((g) => ({
+    genre: g,
+    label: GENRE_LABELS[g],
+    posts: genreMap[g].slice(0, 10),
+  })).filter((g) => g.posts.length > 0);
 
   return {
     generated_at: new Date().toISOString(),
-    categories,
+    genres,
   };
 }
 
 export async function GET() {
   try {
-    const cachedRecommendations = unstable_cache(
+    const cached = unstable_cache(
       generateRecommendations,
-      ['recommendations-v3'],
-      {
-        revalidate: 86400,
-        tags: ['recommendations'],
-      }
+      ['recommendations-v4'],
+      { revalidate: 86400, tags: ['recommendations'] }
     );
 
-    const data = await cachedRecommendations();
-
+    const data = await cached();
     const response = NextResponse.json(data);
     response.headers.set(
       'Cache-Control',

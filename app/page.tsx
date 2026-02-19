@@ -7,56 +7,27 @@ import type { ClassifiedPost } from '@/components/TopicCard';
 import ReelDetailModal from '@/components/ReelDetailModal';
 import LoadingSpinner from '@/components/LoadingSpinner';
 
-interface HARMCategory {
-  category: 'health' | 'ambition' | 'relationship' | 'money';
+interface GenreGroup {
+  genre: string;
   label: string;
   posts: ClassifiedPost[];
 }
 
 interface RecommendationsResponse {
   generated_at: string;
-  categories: HARMCategory[];
+  genres: GenreGroup[];
 }
-
-const CATEGORY_CONFIG: Record<
-  string,
-  { emoji: string; color: string; border: string; bg: string }
-> = {
-  health: {
-    emoji: '💪',
-    color: 'text-emerald-700',
-    border: 'border-emerald-200',
-    bg: 'bg-emerald-50',
-  },
-  ambition: {
-    emoji: '🚀',
-    color: 'text-purple-700',
-    border: 'border-purple-200',
-    bg: 'bg-purple-50',
-  },
-  relationship: {
-    emoji: '💬',
-    color: 'text-pink-700',
-    border: 'border-pink-200',
-    bg: 'bg-pink-50',
-  },
-  money: {
-    emoji: '💰',
-    color: 'text-amber-700',
-    border: 'border-amber-200',
-    bg: 'bg-amber-50',
-  },
-};
 
 export default function Home() {
   const [selectedReel, setSelectedReel] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeGenre, setActiveGenre] = useState<string | null>(null);
 
   const { data, isLoading, error } = useQuery<RecommendationsResponse>({
     queryKey: ['recommendations'],
     queryFn: async () => {
       const res = await fetch('/api/recommendations');
-      if (!res.ok) throw new Error('Failed to fetch recommendations');
+      if (!res.ok) throw new Error('Failed to fetch');
       return res.json();
     },
     staleTime: 24 * 60 * 60 * 1000,
@@ -67,11 +38,15 @@ export default function Home() {
     setIsModalOpen(true);
   };
 
-  // Find owner_id from the categories data
+  // Set default active genre once data loads
+  const genres = data?.genres || [];
+  const currentGenre = activeGenre || genres[0]?.genre || null;
+  const currentGroup = genres.find((g) => g.genre === currentGenre);
+
   const selectedOwnerId = (() => {
     if (!selectedReel || !data) return null;
-    for (const cat of data.categories) {
-      const post = cat.posts.find((p) => p.ig_code === selectedReel);
+    for (const g of data.genres) {
+      const post = g.posts.find((p) => p.ig_code === selectedReel);
       if (post) return post.owner_username || 'unknown';
     }
     return null;
@@ -79,93 +54,83 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50/50">
-      <div className="max-w-5xl mx-auto px-4 py-8 md:py-12">
+      <div className="max-w-4xl mx-auto px-4 py-6 md:px-8 md:py-10">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-2.5 mb-2">
-            <svg
-              className="w-6 h-6 text-amber-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-              />
-            </svg>
-            <h1 className="text-xl font-bold text-gray-900">今日これ撮れ</h1>
-          </div>
-          <p className="text-sm text-gray-500">
-            バズ投稿をHARMジャンル別に分類。タップして台本を確認、そのまま撮影へ
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
+            今日これ撮れ
+          </h1>
+          <p className="text-sm text-gray-500 mt-1">
+            直近30日のバズ投稿をジャンル別に整理
+            {data?.generated_at && (
+              <span className="text-gray-400">
+                {' · '}
+                {new Date(data.generated_at).toLocaleDateString('ja-JP', {
+                  month: 'short',
+                  day: 'numeric',
+                })}
+                更新
+              </span>
+            )}
           </p>
-          {data?.generated_at && (
-            <p className="text-xs text-gray-400 mt-1">
-              最終更新:{' '}
-              {new Date(data.generated_at).toLocaleString('ja-JP', {
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-              })}
-            </p>
-          )}
         </div>
 
-        {/* Content */}
         {isLoading && <LoadingSpinner />}
 
         {error && (
-          <div className="text-center py-16">
-            <p className="text-red-500 text-sm">
-              おすすめの取得に失敗しました
-            </p>
-            <p className="text-gray-400 text-xs mt-1">
+          <div className="bg-red-50/80 border border-red-200/60 rounded-2xl p-6 shadow-sm">
+            <p className="text-red-800 text-sm font-medium">取得に失敗しました</p>
+            <p className="text-red-600 text-xs mt-1">
               しばらくしてからもう一度お試しください
             </p>
           </div>
         )}
 
-        {data && (
-          <div className="space-y-8">
-            {data.categories.map((cat) => {
-              const config =
-                CATEGORY_CONFIG[cat.category] || CATEGORY_CONFIG.ambition;
-              return (
-                <section key={cat.category}>
-                  {/* Category Header */}
-                  <div
-                    className={`flex items-center gap-2 mb-4 px-3 py-2 rounded-xl ${config.bg} border ${config.border}`}
+        {data && genres.length > 0 && (
+          <>
+            {/* Genre Tabs */}
+            <div className="flex gap-1 mb-4 overflow-x-auto pb-1 -mx-1 px-1">
+              {genres.map((g) => (
+                <button
+                  key={g.genre}
+                  onClick={() => setActiveGenre(g.genre)}
+                  className={`shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                    g.genre === currentGenre
+                      ? 'bg-slate-700 text-white'
+                      : 'bg-white text-gray-600 border border-gray-200/60 hover:bg-gray-50'
+                  }`}
+                >
+                  {g.label}
+                  <span
+                    className={`ml-1.5 ${
+                      g.genre === currentGenre
+                        ? 'text-gray-300'
+                        : 'text-gray-400'
+                    }`}
                   >
-                    <span className="text-lg">{config.emoji}</span>
-                    <h2 className={`text-sm font-bold ${config.color}`}>
-                      {cat.label}
-                    </h2>
-                    <span className="text-xs text-gray-400 ml-auto">
-                      {cat.posts.length}件
-                    </span>
-                  </div>
+                    {g.posts.length}
+                  </span>
+                </button>
+              ))}
+            </div>
 
-                  {/* Post Cards Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {cat.posts.map((post) => (
-                      <PostCard
-                        key={post.ig_code}
-                        post={post}
-                        onReelClick={handleReelClick}
-                      />
-                    ))}
-                  </div>
-                </section>
-              );
-            })}
-          </div>
+            {/* Post List */}
+            {currentGroup && (
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200/60 overflow-hidden divide-y divide-gray-200/60">
+                {currentGroup.posts.map((post, i) => (
+                  <PostCard
+                    key={post.ig_code}
+                    post={post}
+                    rank={i + 1}
+                    onClick={() => handleReelClick(post.ig_code)}
+                  />
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
 
-      {/* Reel Detail Modal */}
       {selectedReel && selectedOwnerId && (
         <ReelDetailModal
           igCode={selectedReel}
