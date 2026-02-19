@@ -50,7 +50,7 @@ export default function PostCard({ post, rank, onClick }: PostCardProps) {
             </span>
             <span>{fmt(post.video_view_count)} 再生</span>
             <span>{fmt(post.likes_count)} いいね</span>
-            <span>ER {post.engagement_rate.toFixed(1)}%</span>
+            <span>ER {(post.engagement_rate * 100).toFixed(1)}%</span>
           </div>
         </div>
 
