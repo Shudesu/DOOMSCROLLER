@@ -7,7 +7,7 @@ async function getCachedReelDetail(ig_code: string) {
   // お気に入り状態は別APIで取得するため、ここでは含めない
   const sql = `
     SELECT
-      COALESCE(m.ig_code, j.ig_code) as ig_code,
+      j.ig_code,
       COALESCE(m.owner_id, j.owner_id) as owner_id,
       m.owner_username,
       m.likes_count,
@@ -23,8 +23,8 @@ async function getCachedReelDetail(ig_code: string) {
       j.updated_at,
       j.video_r2_key
     FROM public.ig_jobs j
-    FULL OUTER JOIN public.ig_post_metrics m ON m.ig_code = j.ig_code
-    WHERE COALESCE(m.ig_code, j.ig_code) = $1
+    LEFT JOIN public.ig_post_metrics m ON m.ig_code = j.ig_code
+    WHERE j.ig_code = $1
     LIMIT 1
   `;
 

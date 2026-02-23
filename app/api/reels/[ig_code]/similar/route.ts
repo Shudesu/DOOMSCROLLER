@@ -2,35 +2,47 @@ import { NextRequest, NextResponse } from 'next/server';
 import { queryEmbedding, query } from '@/lib/db';
 import { unstable_cache } from 'next/cache';
 
-async function getCachedSimilarReels(ig_code: string) {
+async function getVectorSearchResults(ig_code: string) {
+  const similarSql = `
+    SELECT
+      b.ig_code,
+      1 - (a.embedding <=> b.embedding) AS similarity
+    FROM script_vectors a
+    JOIN script_vectors b
+      ON a.ig_code <> b.ig_code
+    WHERE a.ig_code = $1
+      AND a.chunk_index = 0
+      AND b.chunk_index = 0
+    ORDER BY a.embedding <=> b.embedding
+    LIMIT 20
+  `;
+
+  const similarResult = await queryEmbedding<{
+    ig_code: string;
+    similarity: number;
+  }>(similarSql, [ig_code]);
+
+  return similarResult.rows;
+}
+
+const getCachedVectorSearch = (ig_code: string) =>
+  unstable_cache(
+    () => getVectorSearchResults(ig_code),
+    ['vector-search', ig_code],
+    { revalidate: 300, tags: [`vector-search-${ig_code}`] }
+  )();
+
+async function getSimilarReels(ig_code: string) {
   try {
-    // 1. Neon DBから類似投稿を検索（chunk_index=0の最初のchunkを使用）
-    const similarSql = `
-      SELECT
-        b.ig_code,
-        1 - (a.embedding <=> b.embedding) AS similarity
-      FROM script_vectors a
-      JOIN script_vectors b
-        ON a.ig_code <> b.ig_code
-      WHERE a.ig_code = $1
-        AND a.chunk_index = 0
-        AND b.chunk_index = 0
-      ORDER BY a.embedding <=> b.embedding
-      LIMIT 20
-    `;
+    // 1. Neon DBから類似投稿を検索（キャッシュ付き）
+    const vectorResults = await getCachedVectorSearch(ig_code);
 
-    const similarResult = await queryEmbedding<{
-      ig_code: string;
-      similarity: number;
-    }>(similarSql, [ig_code]);
-
-    // 類似投稿が見つからない場合は空配列を返す
-    if (similarResult.rows.length === 0) {
+    if (vectorResults.length === 0) {
       return [];
     }
 
-    // 2. n8nPGから詳細情報を一括取得
-    const igCodes = similarResult.rows.map((row) => row.ig_code);
+    // 2. Elestio DBから詳細情報を一括取得
+    const igCodes = vectorResults.map((row) => row.ig_code);
     const detailsSql = `
       SELECT
         m.ig_code,
@@ -64,11 +76,8 @@ async function getCachedSimilarReels(ig_code: string) {
     const detailsMap = new Map(
       detailsResult.rows.map((row) => [row.ig_code, row])
     );
-    const similarityMap = new Map(
-      similarResult.rows.map((row) => [row.ig_code, row.similarity])
-    );
 
-    const similarReels = similarResult.rows
+    const similarReels = vectorResults
       .map((row) => {
         const details = detailsMap.get(row.ig_code);
         if (!details) return null;
@@ -103,10 +112,10 @@ export async function GET(
     const { ig_code } = await params;
 
     const cachedSimilarReels = unstable_cache(
-      async (code: string) => getCachedSimilarReels(code),
+      async (code: string) => getSimilarReels(code),
       ['similar-reels', ig_code],
       {
-        revalidate: 300, // 5分間キャッシュ
+        revalidate: 300,
         tags: [`similar-reels-${ig_code}`],
       }
     );

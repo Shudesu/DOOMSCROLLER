@@ -59,12 +59,10 @@ export default function ReelDetailModal({
   const queryClient = useQueryClient();
 
   // Reel Detail を React Query で取得
-  const { data: reel, isLoading: loading, refetch: refetchReel } = useQuery({
+  const { data: reel, isLoading: loading } = useQuery({
     queryKey: ['reel-detail', igCode],
     queryFn: async () => {
-      const response = await fetch(`/api/reels/${igCode}`, {
-        cache: 'no-store',
-      });
+      const response = await fetch(`/api/reels/${igCode}`);
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         const errorMessage = errorData.error || `HTTP error! status: ${response.status}`;
@@ -72,23 +70,21 @@ export default function ReelDetailModal({
       }
       return response.json() as Promise<ReelDetail>;
     },
-    staleTime: 0,
+    staleTime: 60_000,
     enabled: isOpen && !!igCode,
   });
 
-  // お気に入り状態を別APIで取得（キャッシュを使わず、常に最新の状態を取得）
-  const { data: favoriteStatus, refetch: refetchFavorite } = useQuery({
+  // お気に入り状態を別APIで取得
+  const { data: favoriteStatus } = useQuery({
     queryKey: ['favorite-status', igCode],
     queryFn: async () => {
-      const response = await fetch(`/api/favorites/${igCode}/check`, {
-        cache: 'no-store',
-      });
+      const response = await fetch(`/api/favorites/${igCode}/check`);
       if (!response.ok) {
         return { is_favorite: false };
       }
       return response.json() as Promise<{ is_favorite: boolean }>;
     },
-    staleTime: 0, // 常に最新データを取得
+    staleTime: 60_000,
     enabled: isOpen && !!igCode,
   });
 
@@ -131,15 +127,13 @@ export default function ReelDetailModal({
     queryKey: ['favorite-status', selectedSimilarReel?.ig_code],
     queryFn: async () => {
       if (!selectedSimilarReel?.ig_code) return null;
-      const response = await fetch(`/api/favorites/${selectedSimilarReel.ig_code}/check`, {
-        cache: 'no-store',
-      });
+      const response = await fetch(`/api/favorites/${selectedSimilarReel.ig_code}/check`);
       if (!response.ok) {
         return { is_favorite: false };
       }
       return response.json() as Promise<{ is_favorite: boolean }>;
     },
-    staleTime: 0,
+    staleTime: 60_000,
     enabled: !!selectedSimilarReel?.ig_code && viewMode === 'compare',
   });
 
@@ -228,11 +222,6 @@ export default function ReelDetailModal({
       setSelectedSimilarReel(null);
       // 背景のスクロールを無効化
       document.body.style.overflow = 'hidden';
-      // モーダルを開いた時に最新データを取得
-      if (igCode) {
-        refetchReel();
-        refetchFavorite(); // お気に入り状態も最新のものを取得
-      }
     } else {
       // モーダルを閉じるときに背景のスクロールを有効化
       document.body.style.overflow = '';
@@ -242,7 +231,7 @@ export default function ReelDetailModal({
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isOpen, igCode, refetchReel, refetchFavorite]);
+  }, [isOpen, igCode]);
 
   const formatSimilarity = (similarity: number): string => {
     return `${(similarity * 100).toFixed(1)}%`;

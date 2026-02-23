@@ -69,6 +69,7 @@ async function generateRecommendations() {
     WHERE j.transcript_ja IS NOT NULL AND j.transcript_ja != ''
       AND (r.owner_username IS NULL OR r.owner_username NOT IN (${excludePlaceholders}))
     ORDER BY r.total_score DESC
+    LIMIT 100
   `;
 
   const result = await query<RankingRow>(sql, EXCLUDED_ACCOUNTS);
@@ -146,15 +147,15 @@ async function generateRecommendations() {
   };
 }
 
+const cachedRecommendations = unstable_cache(
+  generateRecommendations,
+  ['recommendations-v5'],
+  { revalidate: 86400, tags: ['recommendations'] }
+);
+
 export async function GET() {
   try {
-    const cached = unstable_cache(
-      generateRecommendations,
-      ['recommendations-v5'],
-      { revalidate: 86400, tags: ['recommendations'] }
-    );
-
-    const data = await cached();
+    const data = await cachedRecommendations();
     const response = NextResponse.json(data);
     response.headers.set(
       'Cache-Control',

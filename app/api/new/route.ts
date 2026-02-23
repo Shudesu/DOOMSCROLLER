@@ -1,5 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query } from '@/lib/db';
+import { unstable_cache } from 'next/cache';
+
+const getCachedCount = unstable_cache(
+  async () => {
+    const countSql = `
+      SELECT COUNT(*) as total
+      FROM public.ig_jobs j
+      LEFT JOIN public.ig_post_metrics m ON j.ig_code = m.ig_code
+      LEFT JOIN public.ig_accounts a ON j.owner_id = a.owner_id
+    `;
+    const countResult = await query<{ total: string }>(countSql);
+    return parseInt(countResult.rows[0].total, 10);
+  },
+  ['new-posts-count'],
+  { revalidate: 300 }
+);
 
 export async function GET(request: NextRequest) {
   try {
@@ -29,7 +45,7 @@ export async function GET(request: NextRequest) {
 
     // データ取得クエリ
     const dataSql = `
-      SELECT 
+      SELECT
         j.ig_code,
         j.owner_id,
         COALESCE(m.owner_username, a.username) as owner_username,
@@ -47,15 +63,7 @@ export async function GET(request: NextRequest) {
       LIMIT $1 OFFSET $2
     `;
 
-    // 総件数取得クエリ
-    const countSql = `
-      SELECT COUNT(*) as total
-      FROM public.ig_jobs j
-      LEFT JOIN public.ig_post_metrics m ON j.ig_code = m.ig_code
-      LEFT JOIN public.ig_accounts a ON j.owner_id = a.owner_id
-    `;
-
-    const [dataResult, countResult] = await Promise.all([
+    const [dataResult, totalCount] = await Promise.all([
       query<{
         ig_code: string;
         owner_id: string | null;
@@ -68,10 +76,8 @@ export async function GET(request: NextRequest) {
         created_at: Date;
         canonical_url: string;
       }>(dataSql, [limit, offset]),
-      query<{ total: string }>(countSql)
+      getCachedCount()
     ]);
-
-    const totalCount = parseInt(countResult.rows[0].total, 10);
 
     const posts = dataResult.rows.map((row) => ({
       ig_code: row.ig_code,
